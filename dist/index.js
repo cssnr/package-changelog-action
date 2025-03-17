@@ -65996,8 +65996,8 @@ function toAlignment(value) {
 }
 
 ;// CONCATENATED MODULE: ./src/index.js
-const fs = __nccwpck_require__(9896)
-const path = __nccwpck_require__(6928)
+// const fs = require('fs')
+// const path = require('path')
 
 const core = __nccwpck_require__(7484)
 const github = __nccwpck_require__(3228)
@@ -66061,13 +66061,13 @@ const semverCompare = __nccwpck_require__(8469)
         console.log('Current Tag:', current.tag_name)
         console.log('Previous Tag:', previous.tag_name)
 
-        // Parse lockPath
-        console.log('config.path:', config.path)
-        const lockPath = path.resolve(process.cwd(), config.path)
-        console.log('lockPath:', lockPath)
-        if (!fs.existsSync(lockPath)) {
-            return core.setFailed(`Unable to find lock file: ${config.path}`)
-        }
+        // // Parse lockPath
+        // console.log('config.path:', config.path)
+        // const lockPath = path.resolve(process.cwd(), config.path)
+        // console.log('lockPath:', lockPath)
+        // if (!fs.existsSync(lockPath)) {
+        //     return core.setFailed(`Unable to find lock file: ${config.path}`)
+        // }
 
         // CURRENT
         const currentLockData = await octokit.rest.repos.getContent({
@@ -66278,7 +66278,7 @@ async function addSummary(config, markdown) {
     core.summary.addRaw('## Package Changelog Action\n\n')
     core.summary.addRaw('🚀 We Did It Red It!\n\n')
 
-    core.summary.addRaw('<details><summary>Changelog</summary>')
+    core.summary.addRaw('<details><summary>Changelog</summary>\n')
     core.summary.addRaw(markdown)
     core.summary.addRaw('</details>\n')
 

@@ -1,5 +1,5 @@
-const fs = require('fs')
-const path = require('path')
+// const fs = require('fs')
+// const path = require('path')
 
 const core = require('@actions/core')
 const github = require('@actions/github')
@@ -66,13 +66,13 @@ import { markdownTable } from 'markdown-table'
         console.log('Current Tag:', current.tag_name)
         console.log('Previous Tag:', previous.tag_name)
 
-        // Parse lockPath
-        console.log('config.path:', config.path)
-        const lockPath = path.resolve(process.cwd(), config.path)
-        console.log('lockPath:', lockPath)
-        if (!fs.existsSync(lockPath)) {
-            return core.setFailed(`Unable to find lock file: ${config.path}`)
-        }
+        // // Parse lockPath
+        // console.log('config.path:', config.path)
+        // const lockPath = path.resolve(process.cwd(), config.path)
+        // console.log('lockPath:', lockPath)
+        // if (!fs.existsSync(lockPath)) {
+        //     return core.setFailed(`Unable to find lock file: ${config.path}`)
+        // }
 
         // CURRENT
         const currentLockData = await octokit.rest.repos.getContent({
@@ -283,7 +283,7 @@ async function addSummary(config, markdown) {
     core.summary.addRaw('## Package Changelog Action\n\n')
     core.summary.addRaw('🚀 We Did It Red It!\n\n')
 
-    core.summary.addRaw('<details><summary>Changelog</summary>')
+    core.summary.addRaw('<details><summary>Changelog</summary>\n')
     core.summary.addRaw(markdown)
     core.summary.addRaw('</details>\n')
 

@@ -31,15 +31,20 @@ between the current and previous release and update the release notes with a tab
 
 ## Inputs
 
-| Input   | Type | Default&nbsp;Value    | Input&nbsp;Description   |
-| :------ | :--: | :-------------------- | :----------------------- |
-| path    |  -   | `package-lock.json`   | Location of package file |
-| update  |  -   | `true`                | Update Release Notes \*  |
-| heading |  -   | `### Package Changes` | Release notes heading    |
-| summary |  -   | `true`                | Add Summary to Job       |
-| token   |  -   | `github.token`        | For use with a PAT [^1]  |
+| Input   | Req. | Default&nbsp;Value           | Input&nbsp;Description   |
+| :------ | :--: | :--------------------------- | :----------------------- |
+| path    |  -   | `package-lock.json`          | Location of package file |
+| update  |  -   | `true`                       | Update Release Notes \*  |
+| heading |  -   | `### Package Changes`        | Release notes heading    |
+| text    |  -   | `Click Here to View Changes` | Summary Toggle Text      |
+| open    |  -   | `false`                      | Summary Open by Default  |
+| summary |  -   | `true`                       | Add Summary to Job       |
+| token   |  -   | `github.token`               | For use with a PAT [^1]  |
 
 **update:** Set this to `false` if you only want to use the [Outputs](#Outputs).
+
+**heading/text:** You can set the `heading` to an empty string to remove it.
+The `text` must be unset (default) or set to a non-empty string.
 
 **summary:** Will add the results to the job summary in the workflow results.
 
@@ -49,8 +54,12 @@ between the current and previous release and update the release notes with a tab
 
 ### Package Changes
 
+<details open><summary>Click Here to View Changes</summary>
+
+Changes for: [package-lock.json](package-lock.json)
+
 | Package                                      | ❔  | Before | After  |
-| -------------------------------------------- | --- | ------ | ------ |
+| :------------------------------------------- | :-: | :----- | :----- |
 | @eslint/config-helpers                       | 🆕  |        | 0.1.0  |
 | @eslint-community/eslint-utils               | ✅  | 4.4.1  | 4.5.1  |
 | @eslint/core                                 | ✅  | 0.11.0 | 0.12.0 |
@@ -69,6 +78,8 @@ between the current and previous release and update the release notes with a tab
 | flatted                                      | ✅  | 3.3.2  | 3.3.3  |
 | prettier                                     | ✅  | 3.5.0  | 3.5.3  |
 | @eslint/plugin-kit/node_modules/@eslint/core | ⛔  | 0.10.0 |        |
+
+</details>
 
 ---
 

@@ -18,6 +18,14 @@ inputs:
     description: "Release Notes Heading"
     required: false
     default: "### Package Changes"
+  text:
+    description: "Text for Summary Toggle"
+    required: true
+    default: "Click Here to View Changes"
+  open:
+    description: "Summary Open by Default"
+    required: false
+    default: "false"
   summary:
     description: "Add Summary to Job"
     required: false

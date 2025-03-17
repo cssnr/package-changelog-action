@@ -33,10 +33,14 @@ jobs:
       - name: "Test Local Action"
         id: test
         uses: ./
+        with:
+          open: true
+          #heading: ""
+          update: false
 
       - name: "Verify Outputs"
         run: |
-          echo "json: '${{ steps.test.outputs.json }}'"
+          #echo "json: '${{ steps.test.outputs.json }}'"
           if [ -z '${{ steps.test.outputs.json }}' ];then
             echo "No Output: json"
             exit 1

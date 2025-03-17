@@ -66108,13 +66108,10 @@ const semverCompare = __nccwpck_require__(8469)
         // Parse Changes
         const lockChanges = diffLocks(prevLock, currentLock)
         // console.log('lockChanges:', lockChanges)
-        const table = genTable(lockChanges)
-        // console.log('table:', table)
-        const markdown = markdownTable(
-            [['Package', '❔', 'Before', 'After'], ...table],
-            { align: ['l', 'c', 'l', 'l'] }
-        )
-        // console.log('markdown:', markdown)
+        const tableData = genTable(lockChanges)
+        // console.log('tableData:', tableData)
+        const markdown = genMarkdown(config, tableData)
+        console.log('markdown:', markdown)
 
         core.startGroup('Current Release Body')
         core.info(current.body)
@@ -66122,12 +66119,13 @@ const semverCompare = __nccwpck_require__(8469)
 
         // Make Changes
         core.startGroup('Updated Release Body')
-        const body = `${current.body}\n\n${config.heading}\n${markdown}\n`
+        const body = `${current.body}\n\n${markdown}\n`
         console.log(body)
         core.endGroup() // Updated Release Body
 
         // Update Release
         if (config.update) {
+            core.info('⌛ \u001b[33;1mUpdating Release Now...')
             await octokit.rest.repos.updateRelease({
                 ...github.context.repo,
                 release_id: config.release_id,
@@ -66156,6 +66154,24 @@ const semverCompare = __nccwpck_require__(8469)
         core.setFailed(e.message)
     }
 })()
+
+function genMarkdown(config, data) {
+    const table = markdownTable(
+        [['Package&nbsp;Name', '❔', 'Before', 'After'], ...data],
+        { align: ['l', 'c', 'l', 'l'] }
+    )
+    console.log('table:', table)
+    let result = `${config.heading}\n\n`
+    if (data.length) {
+        const open = config.open ? ' open' : ''
+        result +=
+            `<details${open}><summary>${config.text}</summary>\n\n` +
+            `Changes for: [${config.path}](${config.path})\n\n${table}\n\n</details>\n`
+    } else {
+        result += `No \`${config.path}\` changes detected.`
+    }
+    return result
+}
 
 function genTable(data) {
     const sections = [
@@ -66278,9 +66294,10 @@ async function addSummary(config, markdown) {
     core.summary.addRaw('## Package Changelog Action\n\n')
     core.summary.addRaw('🚀 We Did It Red It!\n\n')
 
-    core.summary.addRaw('<details><summary>Changelog</summary>\n')
-    core.summary.addRaw(markdown)
-    core.summary.addRaw('</details>\n')
+    // core.summary.addRaw('<details><summary>Changelog</summary>')
+    // core.summary.addRaw(`\n\n${markdown}\n\n`)
+    // core.summary.addRaw('</details>\n')
+    core.summary.addRaw(`---\n\n${markdown}\n\n---\n\n`)
 
     delete config.token
     const yaml = Object.entries(config)
@@ -66298,13 +66315,15 @@ async function addSummary(config, markdown) {
 
 /**
  * Get Config
- * @return {{ path: string, update: boolean, heading: string, summary: boolean, token: string, release_id: number }}
+ * @return {{ path: string, update: boolean, heading: string, text: string, open: boolean, summary: boolean, token: string, release_id: number }}
  */
 function getConfig() {
     return {
         path: core.getInput('path'),
         update: core.getBooleanInput('update'),
         heading: core.getInput('heading'),
+        text: core.getInput('text'),
+        open: core.getBooleanInput('open'),
         summary: core.getBooleanInput('summary'),
         token: core.getInput('token', { required: true }),
         release_id: github.context.payload.release.id,

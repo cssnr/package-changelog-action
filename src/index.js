@@ -14,7 +14,7 @@ import { markdownTable } from 'markdown-table'
 // main
 ;(async () => {
     try {
-        core.info(`🏳️ Starting Update Release Notes Action`)
+        core.info(`🏳️ Starting Package Changelog Action`)
 
         // // Extra Debug
         // core.startGroup('Debug: github.context')
@@ -144,8 +144,8 @@ import { markdownTable } from 'markdown-table'
 
         // Outputs
         core.info('📩 Setting Outputs')
-        core.setOutput('changes', lockChanges)
-        core.setOutput('table', markdown)
+        core.setOutput('json', lockChanges)
+        core.setOutput('markdown', markdown)
         // core.setOutput('notes', notes)
 
         // Summary

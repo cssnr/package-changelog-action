@@ -33,19 +33,17 @@ jobs:
       - name: "Test Local Action"
         id: test
         uses: ./
-        #with:
-        #  update: false
 
       - name: "Verify Outputs"
         run: |
-          echo "changes: '${{ steps.test.outputs.changes }}'"
-          if [ -z '${{ steps.test.outputs.changes }}' ];then
-            echo "No Output: changes"
+          echo "json: '${{ steps.test.outputs.json }}'"
+          if [ -z '${{ steps.test.outputs.json }}' ];then
+            echo "No Output: json"
             exit 1
           fi
-          echo "table: '${{ steps.test.outputs.table }}'"
-          if [ -z '${{ steps.test.outputs.table }}' ];then
-            echo "No Output: table"
+          echo "markdown: '${{ steps.test.outputs.markdown }}'"
+          if [ -z '${{ steps.test.outputs.markdown }}' ];then
+            echo "No Output: markdown"
             exit 1
           fi
 

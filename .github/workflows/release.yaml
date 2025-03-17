@@ -24,7 +24,7 @@ jobs:
           echo "steps.tags.outputs.tags: ${{ steps.tags.outputs.tags }}"
 
       - name: "Update Release Notes Action"
-        uses: smashedr/package-changelog-action@master
+        uses: smashedr/update-release-notes-action@master
         continue-on-error: true
         with:
           tags: ${{ steps.tags.outputs.tags }}
@@ -32,4 +32,8 @@ jobs:
 
       - name: "Package Changelog Action"
         uses: smashedr/package-changelog-action@master
+        continue-on-error: true
+
+      - name: "Combine Release Notes Action"
+        uses: smashedr/combine-release-notes-action@master
         continue-on-error: true

@@ -1,6 +1,7 @@
 [![GitHub Tag Major](https://img.shields.io/github/v/tag/smashedr/package-changelog-action?sort=semver&filter=!v*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/smashedr/package-changelog-action/tags)
 [![GitHub Tag Minor](https://img.shields.io/github/v/tag/smashedr/package-changelog-action?sort=semver&filter=!v*.*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/smashedr/package-changelog-action/tags)
 [![GitHub Release Version](https://img.shields.io/github/v/release/smashedr/package-changelog-action?logo=git&logoColor=white&label=latest)](https://github.com/smashedr/package-changelog-action/releases/latest)
+[![GitHub Dist Size](https://img.shields.io/github/size/smashedr/package-changelog-action/dist%2Findex.js?label=dist%20size)](https://github.com/smashedr/package-changelog-action/blob/master/src/index.js)
 [![Workflow Release](https://img.shields.io/github/actions/workflow/status/smashedr/package-changelog-action/release.yaml?logo=github&label=release)](https://github.com/smashedr/package-changelog-action/actions/workflows/release.yaml)
 [![Workflow Test](https://img.shields.io/github/actions/workflow/status/smashedr/package-changelog-action/test.yaml?logo=github&label=test)](https://github.com/smashedr/package-changelog-action/actions/workflows/test.yaml)
 [![Workflow lint](https://img.shields.io/github/actions/workflow/status/smashedr/package-changelog-action/lint.yaml?logo=github&label=lint)](https://github.com/smashedr/package-changelog-action/actions/workflows/lint.yaml)
@@ -23,7 +24,7 @@
 - [Support](#Support)
 - [Contributing](#Contributing)
 
-Action to Generate Package Changelogs.
+Action to Generate Package Changelog.
 
 On a release, this action will parse the differences in the provided `package-lock.json` file
 between the current and previous release and update the release notes with a table of changes.
@@ -91,12 +92,12 @@ permissions:
 
 ## Outputs
 
-| Output  | Output&nbsp;Description |
-| :------ | :---------------------- |
-| changes | Chnages JSON Object     |
-| table   | Changes Markdown Table  |
+| Output   | Output&nbsp;Description |
+| :------- | :---------------------- |
+| json     | Chnages JSON Object     |
+| markdown | Changes Markdown Table  |
 
-This outputs the `changes` JSON and the markdown `table`.
+This outputs the changes `json` object and the `markdown` table.
 
 Output examples coming soon...
 
@@ -107,8 +108,8 @@ Output examples coming soon...
 
 - name: 'Echo Output'
   run: |
-    echo "changes: '${{ steps.changelog.outputs.bchanges}}'"
-    echo "table: '${{ steps.changelog.outputs.table}}'"
+    echo "json: '${{ steps.changelog.outputs.json }}'"
+    echo "markdown: '${{ steps.changelog.outputs.markdown }}'"
 ```
 
 ## Examples
@@ -149,8 +150,8 @@ Output examples coming soon...
 
 - name: 'Echo Output'
   run: |
-    echo "changes: '${{ steps.changelog.outputs.bchanges}}'"
-    echo "table: '${{ steps.changelog.outputs.table}}'"
+    echo "json: '${{ steps.changelog.outputs.json }}'"
+    echo "markdown: '${{ steps.changelog.outputs.markdown }}'"
 ```
 
 </details>

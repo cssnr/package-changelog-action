@@ -66009,7 +66009,7 @@ const semverCompare = __nccwpck_require__(8469)
 
 ;(async () => {
     try {
-        core.info(`🏳️ Starting Update Release Notes Action`)
+        core.info(`🏳️ Starting Package Changelog Action`)
 
         // // Extra Debug
         // core.startGroup('Debug: github.context')
@@ -66139,8 +66139,8 @@ const semverCompare = __nccwpck_require__(8469)
 
         // Outputs
         core.info('📩 Setting Outputs')
-        core.setOutput('changes', lockChanges)
-        core.setOutput('table', markdown)
+        core.setOutput('json', lockChanges)
+        core.setOutput('markdown', markdown)
         // core.setOutput('notes', notes)
 
         // Summary

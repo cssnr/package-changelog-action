@@ -28,9 +28,9 @@ inputs:
     default: ${{ github.token }}
 
 outputs:
-  changes:
+  json:
     description: "Changes JSON Object"
-  table:
+  markdown:
     description: "Changes Markdown Table"
 
 runs:

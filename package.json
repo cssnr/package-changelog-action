@@ -1,0 +1,25 @@
+{
+  "name": "package-changelog-action",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/index.js",
+    "build:watch": "npm run build -- --watch",
+    "lint": "npx eslint src",
+    "prettier": "npx prettier --write .",
+    "prettier:check": "npx prettier --check ."
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.0",
+    "js-base64": "^3.7.7",
+    "markdown-table": "^3.0.4",
+    "semver": "^7.7.1",
+    "snyk-nodejs-lockfile-parser": "1.38.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "@vercel/ncc": "^0.38.3",
+    "eslint": "^9.22.0",
+    "prettier": "^3.5.3"
+  }
+}

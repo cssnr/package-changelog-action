@@ -1,0 +1,56 @@
+name: "Test"
+
+on:
+  workflow_dispatch:
+  #schedule:
+  #  - cron: "18 18 * * 1,3,5"
+  #push:
+  #  branches: ["**"]
+  #  paths:
+  #    - "dist/**"
+  #    - "src/**"
+  #    - ".github/workflows/test.yaml"
+  #    - "package*.json"
+  #    - "requirements.txt"
+  #    - "action.yml"
+
+jobs:
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Debug event.json"
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
+
+      - name: "Test Local Action"
+        id: test
+        uses: ./
+        #with:
+        #  update: false
+
+      - name: "Verify Outputs"
+        run: |
+          echo "changes: '${{ steps.test.outputs.changes }}'"
+          if [ -z '${{ steps.test.outputs.changes }}' ];then
+            echo "No Output: changes"
+            exit 1
+          fi
+          echo "table: '${{ steps.test.outputs.table }}'"
+          if [ -z '${{ steps.test.outputs.table }}' ];then
+            echo "No Output: table"
+            exit 1
+          fi
+
+      #- name: "Schedule Failure Notification"
+      #  if: ${{ failure() && github.event_name == 'schedule' }}
+      #  uses: sarisia/actions-status-discord@v1
+      #  with:
+      #    webhook: ${{ secrets.DISCORD_WEBHOOK }}

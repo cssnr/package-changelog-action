@@ -1,0 +1,38 @@
+name: "Package Changelog"
+description: "Generates Changelogs for NPM/Node/Yarn Package.json and Package-lock.json Files"
+author: "Shane"
+branding:
+  icon: "activity"
+  color: "yellow"
+
+inputs:
+  path:
+    description: "Path to package-lock.json"
+    required: false
+    default: "package-lock.json"
+  update:
+    description: "Add Summary to Job"
+    required: false
+    default: "true"
+  heading:
+    description: "Release Notes Heading"
+    required: false
+    default: "### Package Changes"
+  summary:
+    description: "Add Summary to Job"
+    required: false
+    default: "true"
+  token:
+    description: "GitHub Token"
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  changes:
+    description: "Changes JSON Object"
+  table:
+    description: "Changes Markdown Table"
+
+runs:
+  using: "node20"
+  main: "dist/index.js"

@@ -17,6 +17,7 @@
 # Package Changelog Action
 
 - [Inputs](#Inputs)
+  - [Changelog Examples](#Changelog-Examples)
   - [Permissions](#Permissions)
 - [Outputs](#Outputs)
 - [Examples](#Examples)
@@ -47,38 +48,51 @@ Packages get sorted into the following categories:
 
 Unchanged is disabled by default and Unknown happens when a semantic version is invalid.
 
+See more [Changelog Examples](#Changelog-Examples) below.
+
 ## Inputs
 
-| Input     | Req. | Default&nbsp;Value           | Input&nbsp;Description     |
-| :-------- | :--: | :--------------------------- | :------------------------- |
-| path      |  -   | `package-lock.json`          | Location of Lock file      |
-| update    |  -   | `true`                       | Update Release Notes \*    |
-| heading   |  -   | `### Package Changes`        | Release Notes Heading \*   |
-| text      |  -   | `Click Here to View Changes` | Summary Toggle Text \*     |
-| open      |  -   | `false`                      | Summary Open by Default    |
-| unchanged |  -   | `false`                      | Include Unchanged Packages |
-| max       |  -   | `30`                         | Max Releases to Process    |
-| summary   |  -   | `true`                       | Add Summary to Job         |
-| token     |  -   | `github.token`               | For use with a PAT [^1]    |
+| Input     | Req. | Default&nbsp;Value           | Input&nbsp;Description                               |
+| :-------- | :--: | :--------------------------- | :--------------------------------------------------- |
+| path      |  -   | `package-lock.json`          | Location of Lock file                                |
+| update    |  -   | `true`                       | Update Release Notes [⤵️](#Changelog-Examples)       |
+| heading   |  -   | `### Package Changes`        | Release Notes Heading [⤵️](#Changelog-Examples)      |
+| text      |  -   | `Click Here to View Changes` | Summary Toggle Text [⤵️](#Changelog-Examples)        |
+| open      |  -   | `false`                      | Summary Open by Default [⤵️](#Changelog-Examples)    |
+| unchanged |  -   | `false`                      | Include Unchanged Packages [⤵️](#Changelog-Examples) |
+| max       |  -   | `30`                         | Max Releases to Process                              |
+| summary   |  -   | `true`                       | Add Summary to Job                                   |
+| token     |  -   | `github.token`               | For use with a PAT                                   |
+
+You can add this to your release workflow with no inputs.
+
+```yaml
+- name: 'Package Changelog Action'
+  uses: smashedr/package-changelog-action@master
+```
+
+### Changelog Examples
 
 **update:** Set this to `false` if you only want to use the [Outputs](#Outputs).
 
 **heading/text:** You can set the `heading` to an empty string to remove it.
 The `text` must be set to a non-empty string if setting.
 
-**summary:** Will add the results to the job summary in the workflow results.
+**open:** Set summary to be open by default (note the first example below is open).
 
-<details><summary>View an Example Release Notes Update</summary>
+**unchanged:** Set this to `true` to include unchanged packages. This can be long...
+
+_Note: Examples are generated with an empty header and default values._
+
+<details open><summary>View an Example Release Notes Update</summary>
 
 ---
-
-### Package Changes
 
 <details open><summary>Click Here to View Changes</summary>
 
 Changes for: [package-lock.json](package-lock.json)
 
-| Package                                      | ❔  | Before | After  |
+| Package&nbsp;Name                            | ❔  | Before | After  |
 | :------------------------------------------- | :-: | :----- | :----- |
 | @eslint/config-helpers                       | 🆕  |        | 0.1.0  |
 | @eslint-community/eslint-utils               | ✅  | 4.4.1  | 4.5.1  |
@@ -109,20 +123,13 @@ Changes for: [package-lock.json](package-lock.json)
 
 ---
 
-### Package Changes
-
 No changes detected in: [package-lock.json](package-lock.json)
 
 ---
 
 </details>
 
-With no inputs this will append a link to report issues.
-
-```yaml
-- name: 'Package Changelog Action'
-  uses: smashedr/package-changelog-action@master
-```
+More Changelog Examples Coming Soon...
 
 ### Permissions
 
@@ -142,8 +149,6 @@ permissions:
 
 This outputs the changes `json` object and the `markdown` table.
 
-Output examples coming soon...
-
 ```yaml
 - name: 'Package Changelog Action'
   id: changelog
@@ -159,6 +164,8 @@ Output examples coming soon...
 ```
 
 Note: due to the way `${{}}` expressions are evaluated, multi-line output gets executed in a run block.
+
+More Output Examples Coming Soon...
 
 ## Examples
 

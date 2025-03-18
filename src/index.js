@@ -174,8 +174,8 @@ import { markdownTable } from 'markdown-table'
 function genMarkdown(config, data) {
     const cols = []
     const align = []
-    config.columns.forEach((c) => cols.push(colMap.t[c]))
-    config.columns.forEach((c) => align.push(colMap.a[c]))
+    config.columns.forEach((c) => cols.push(maps.col[c].col))
+    config.columns.forEach((c) => align.push(maps.col[c].align))
     console.log('cols:', cols)
     console.log('align:', align)
 
@@ -194,16 +194,9 @@ function genMarkdown(config, data) {
 }
 
 function genTable(config, data) {
-    const sections = [
-        { key: 'added', text: 'Added', icon: '🆕' },
-        { key: 'upgraded', text: 'Upgraded', icon: '✅' },
-        { key: 'downgraded', text: 'Downgraded', icon: '⚠️' },
-        { key: 'removed', text: 'Removed', icon: '⛔' },
-        { key: 'unknown', text: 'Unknown', icon: '❓' },
-    ]
-    if (config.unchanged) {
-        sections.push({ key: 'unchanged', text: 'Unchanged', icon: '🔘' })
-    }
+    const sections = []
+    config.sections.forEach((s) => sections.push(maps.sec[s]))
+    console.log('sections:', sections)
     const results = []
     for (const section of sections) {
         console.log('Processing section:', section)
@@ -223,11 +216,7 @@ function genTable(config, data) {
             }
             // console.log('pkg:', pkg)
             const result = []
-            for (const key of config.columns) {
-                console.log('key:', key)
-                console.log('pkg[key]:', pkg[key])
-                result.push(pkg[key])
-            }
+            config.columns.forEach((k) => result.push(pkg[k]))
             // console.log('result:', result)
             results.push(result)
         }
@@ -350,7 +339,6 @@ async function getReleases(config, octokit) {
  */
 async function addSummary(config, markdown) {
     core.summary.addRaw('## Package Changelog Action\n\n')
-
     // core.summary.addRaw('<details><summary>Changelog</summary>')
     // core.summary.addRaw(`\n\n${markdown}\n\n`)
     // core.summary.addRaw('</details>\n')
@@ -370,9 +358,27 @@ async function addSummary(config, markdown) {
     await core.summary.write()
 }
 
+const maps = {
+    col: {
+        n: { align: 'l', col: 'Package&nbsp;Name' },
+        i: { align: 'c', col: '❔' },
+        t: { align: 'c', col: 'Operation' },
+        b: { align: 'l', col: 'Before' },
+        a: { align: 'l', col: 'After' },
+    },
+    sec: {
+        a: { key: 'added', text: 'Added', icon: '🆕' },
+        u: { key: 'upgraded', text: 'Upgraded', icon: '✅' },
+        d: { key: 'downgraded', text: 'Downgraded', icon: '⚠️' },
+        r: { key: 'removed', text: 'Removed', icon: '⛔' },
+        k: { key: 'unknown', text: 'Unknown', icon: '❓' },
+        n: { key: 'unchanged', text: 'Unchanged', icon: '🔘' },
+    },
+}
+
 /**
  * Get Config
- * @return {{ path: string, update: boolean, heading: string, toggle: string, open: boolean, columns: array, unchanged: boolean, max: number, summary: boolean, token: string }}
+ * @return {{ path: string, update: boolean, heading: string, toggle: string, open: boolean, columns: array, sections: array, max: number, summary: boolean, token: string }}
  */
 function getConfig() {
     return {
@@ -382,26 +388,9 @@ function getConfig() {
         toggle: core.getInput('toggle', { required: true }),
         open: core.getBooleanInput('open'),
         columns: core.getInput('columns', { required: true }).split(','),
-        unchanged: core.getBooleanInput('unchanged'),
+        sections: core.getInput('sections', { required: true }).split(','),
         max: parseInt(core.getInput('max', { required: true })),
         summary: core.getBooleanInput('summary'),
         token: core.getInput('token', { required: true }),
     }
-}
-
-const colMap = {
-    t: {
-        n: 'Package&nbsp;Name',
-        i: '❔',
-        t: 'Operation',
-        b: 'Before',
-        a: 'After',
-    },
-    a: {
-        n: 'l',
-        i: 'c',
-        t: 'c',
-        b: 'l',
-        a: 'l',
-    },
 }

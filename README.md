@@ -51,18 +51,18 @@ See more [Changelog Examples](#Changelog-Examples) below and view the [Changelog
 
 ## Inputs
 
-| Input     | Req. | Default&nbsp;Value           | Input&nbsp;Description                              |
-| :-------- | :--: | :--------------------------- | :-------------------------------------------------- |
-| path      |  -   | `package-lock.json`          | Location of Lock File                               |
-| update    |  -   | `true`                       | Update Release Notes [⤵️](#Changelog-Examples)      |
-| heading   |  -   | `### Package Changes`        | Release Notes Heading [⤵️](#Changelog-Options)      |
-| toggle    |  -   | `Click Here to View Changes` | Toggle Text for Summary [⤵️](#Changelog-Options)    |
-| open      |  -   | `false`                      | Summary Open by Default [⤵️](#Changelog-Options)    |
-| columns   |  -   | `n,i,t,b,a`                  | Customize Table Columns [⤵️](#Changelog-Options)    |
-| unchanged |  -   | `false`                      | Include Unchanged Packages [⤵️](#Changelog-Options) |
-| max       |  -   | `30`                         | Max Releases to Process                             |
-| summary   |  -   | `true`                       | Add Workflow Job Summary                            |
-| token     |  -   | `github.token`               | For use with a PAT                                  |
+| Input    | Req. | Default&nbsp;Value           | Input&nbsp;Description                              |
+| :------- | :--: | :--------------------------- | :-------------------------------------------------- |
+| path     |  -   | `package-lock.json`          | Location of Lock File                               |
+| update   |  -   | `true`                       | Update Release Notes [⤵️](#Changelog-Examples)      |
+| heading  |  -   | `### Package Changes`        | Release Notes Heading [⤵️](#Changelog-Options)      |
+| toggle   |  -   | `Click Here to View Changes` | Toggle Text for Summary [⤵️](#Changelog-Options)    |
+| open     |  -   | `false`                      | Summary Open by Default [⤵️](#Changelog-Options)    |
+| columns  |  -   | `n,i,t,b,a`                  | Customize Table Columns [⤵️](#Changelog-Options)    |
+| sections |  -   | `a,u,d,r,k`                  | Customize Package Sections [⤵️](#Changelog-Options) |
+| max      |  -   | `30`                         | Max Releases to Process                             |
+| summary  |  -   | `true`                       | Add Workflow Job Summary                            |
+| token    |  -   | `github.token`               | For use with a PAT                                  |
 
 You can add this to your release workflow with no inputs.
 
@@ -81,11 +81,11 @@ Use the options below to customize the output.
 The `toggle` must be set to a non-empty string if setting this input.
 
 **columns:** Customize column visibility and order. Currently,
-this must be a perfectly formatted CSV with any combination of letters:
+this must be a perfectly formatted CSV with any combination of the letters:
 
 Default value: `n,i,t,b,a`
 
-| Letter | Heading      | Description           |
+| Letter | Column       | Description           |
 | :----: | :----------- | :-------------------- |
 |  `n`   | Package Name | Name of the package   |
 |  `i`   | ❔           | Icon of the outcome   |
@@ -93,9 +93,47 @@ Default value: `n,i,t,b,a`
 |  `b`   | Before       | Version before change |
 |  `a`   | After        | Version after change  |
 
-**open:** Set summary to be open by default (note the first example below is open).
+**sections:** Customize section visibility and order. Currently,
+this must be a perfectly formatted CSV with any combination of the letters:
 
-**unchanged:** Set this to `true` to include unchanged packages. This can be long...
+Default value: `a,u,d,r,k`
+
+| Letter | Section    | Description                |
+| :----: | :--------- | :------------------------- |
+|  `a`   | Added      | Packages was added         |
+|  `u`   | Upgraded   | Package was upgraded       |
+|  `d`   | Downgraded | Package was downgraded     |
+|  `r`   | Removed    | Package was removed        |
+|  `k`   | Unknown    | Package has invalid semver |
+|  `n`   | Unchanged  | Package not changed        |
+
+Note: Enabling Unchanged `n` packages can produce a very long list.
+
+<details><summary>View the Column and Section Maps</summary>
+
+```javascript
+const maps = {
+  col: {
+    n: { align: 'l', col: 'Package&nbsp;Name' },
+    i: { align: 'c', col: '❔' },
+    t: { align: 'c', col: 'Operation' },
+    b: { align: 'l', col: 'Before' },
+    a: { align: 'l', col: 'After' },
+  },
+  sec: {
+    a: { key: 'added', text: 'Added', icon: '🆕' },
+    u: { key: 'upgraded', text: 'Upgraded', icon: '✅' },
+    d: { key: 'downgraded', text: 'Downgraded', icon: '⚠️' },
+    r: { key: 'removed', text: 'Removed', icon: '⛔' },
+    k: { key: 'unknown', text: 'Unknown', icon: '❓' },
+    n: { key: 'unchanged', text: 'Unchanged', icon: '🔘' },
+  },
+}
+```
+
+</details>
+
+**open:** Set summary to be open by default (note the first example below is open).
 
 ### Changelog Examples
 

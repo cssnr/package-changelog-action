@@ -40,6 +40,7 @@ jobs:
           #heading: ""
           #toggle: Toggle Me
           columns: "n,t,b,a"
+          sections: "a,u,d,r,k"
 
       - name: "Verify Outputs"
         env:

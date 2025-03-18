@@ -27,13 +27,13 @@ inputs:
     required: false
     default: "false"
   columns:
-    description: "Show Text in Table"
+    description: "Customize Table Columns"
     required: false
     default: "n,i,t,b,a"
-  unchanged:
-    description: "Include Unchanged Packages"
+  sections:
+    description: "Customize Package Sections"
     required: false
-    default: "false"
+    default: "a,u,d,r,k"
   max:
     description: "Max Releases to Process"
     required: false

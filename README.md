@@ -38,32 +38,30 @@ it compares with the previous non-prerelease.
 
 Packages get sorted into the following categories:
 
-| Package    | ❔  | Before   | After   |
-| :--------- | :-: | :------- | :------ |
-| Added      | 🆕  |          | current |
-| Upgraded   | ✅  | previous | current |
-| Downgraded | ⚠️  | previous | current |
-| Removed    | ⛔  | previous |         |
-| Unknown    | ❓  |          |         |
-| Unchanged  | 🔘  | previous | current |
+| Name        | ❔  | Operation  | Before   | After   |
+| :---------- | :-: | :--------- | :------- | :------ |
+| @added      | 🆕  | Added      |          | current |
+| @upgrade    | ✅  | Upgraded   | previous | current |
+| @downgraded | ⚠️  | Downgraded | previous | current |
+| @removed    | ⛔  | Removed    | previous |         |
+| @unknown    | ❓  | Unknown    |          |         |
+| @unchanged  | 🔘  | Unchanged  | previous | current |
 
-Unchanged is disabled by default and Unknown happens when a semantic version is invalid.
-
-See more [Changelog Examples](#Changelog-Examples) below.
+See more [Changelog Examples](#Changelog-Examples) below and view the [Changelog Options](#Changelog-Options).
 
 ## Inputs
 
 | Input     | Req. | Default&nbsp;Value           | Input&nbsp;Description                              |
 | :-------- | :--: | :--------------------------- | :-------------------------------------------------- |
-| path      |  -   | `package-lock.json`          | Location of Lock file                               |
+| path      |  -   | `package-lock.json`          | Location of Lock File                               |
 | update    |  -   | `true`                       | Update Release Notes [⤵️](#Changelog-Examples)      |
 | heading   |  -   | `### Package Changes`        | Release Notes Heading [⤵️](#Changelog-Options)      |
-| text      |  -   | `Click Here to View Changes` | Summary Toggle Text [⤵️](#Changelog-Options)        |
+| toggle    |  -   | `Click Here to View Changes` | Toggle Text for Summary [⤵️](#Changelog-Options)    |
 | open      |  -   | `false`                      | Summary Open by Default [⤵️](#Changelog-Options)    |
-| icons     |  -   | `true`                       | Use Icons for Changes [⤵️](#Changelog-Options)      |
+| columns   |  -   | `n,i,t,b,a`                  | Customize Table Columns [⤵️](#Changelog-Options)    |
 | unchanged |  -   | `false`                      | Include Unchanged Packages [⤵️](#Changelog-Options) |
 | max       |  -   | `30`                         | Max Releases to Process                             |
-| summary   |  -   | `true`                       | Add Summary to Job                                  |
+| summary   |  -   | `true`                       | Add Workflow Job Summary                            |
 | token     |  -   | `github.token`               | For use with a PAT                                  |
 
 You can add this to your release workflow with no inputs.
@@ -73,16 +71,29 @@ You can add this to your release workflow with no inputs.
   uses: smashedr/package-changelog-action@master
 ```
 
+Use the options below to customize the output.
+
 ### Changelog Options
 
 **update:** Set this to `false` if you only want to use the [Outputs](#Outputs).
 
-**heading/text:** You can set the `heading` to an empty string to remove it.
-The `text` must be set to a non-empty string if setting.
+**heading/toggle:** You can set the `heading` to an empty string to remove it.
+The `toggle` must be set to a non-empty string if setting this input.
+
+**columns:** Customize column visibility and order. Currently,
+this must be a perfectly formatted CSV with any combination of letters:
+
+Default value: `n,i,t,b,a`
+
+| Letter | Heading      | Description           |
+| :----: | :----------- | :-------------------- |
+|  `n`   | Package Name | Name of the package   |
+|  `i`   | ❔           | Icon of the outcome   |
+|  `t`   | Outcome      | Text of the outcome   |
+|  `b`   | Before       | Version before change |
+|  `a`   | After        | Version after change  |
 
 **open:** Set summary to be open by default (note the first example below is open).
-
-**icons:** Set this to `false` to use Text instead of Icon for the change operation.
 
 **unchanged:** Set this to `true` to include unchanged packages. This can be long...
 
@@ -126,36 +137,6 @@ Changes for: [package-lock.json](package-lock.json)
 ---
 
 </details>
-<details><summary>👉 Example with Icons False</summary>
-
----
-
-Changes for: [package-lock.json](package-lock.json)
-
-| Package&nbsp;Name                            | Operation | Before | After  |
-| :------------------------------------------- | :-------: | :----- | :----- |
-| @eslint/config-helpers                       |   Added   |        | 0.1.0  |
-| @eslint-community/eslint-utils               | Upgraded  | 4.4.1  | 4.5.1  |
-| @eslint/core                                 | Upgraded  | 0.11.0 | 0.12.0 |
-| @eslint/eslintrc                             | Upgraded  | 3.2.0  | 3.3.0  |
-| @eslint/js                                   | Upgraded  | 9.20.0 | 9.22.0 |
-| @eslint/plugin-kit                           | Upgraded  | 0.2.5  | 0.2.7  |
-| @humanwhocodes/retry                         | Upgraded  | 0.4.1  | 0.4.2  |
-| @octokit/endpoint                            | Upgraded  | 9.0.5  | 9.0.6  |
-| @octokit/graphql                             | Upgraded  | 7.1.0  | 7.1.1  |
-| @octokit/plugin-paginate-rest                | Upgraded  | 9.2.1  | 9.2.2  |
-| @octokit/request                             | Upgraded  | 8.4.0  | 8.4.1  |
-| @octokit/request-error                       | Upgraded  | 5.1.0  | 5.1.1  |
-| acorn                                        | Upgraded  | 8.14.0 | 8.14.1 |
-| eslint                                       | Upgraded  | 9.20.1 | 9.22.0 |
-| eslint-scope                                 | Upgraded  | 8.2.0  | 8.3.0  |
-| flatted                                      | Upgraded  | 3.3.2  | 3.3.3  |
-| prettier                                     | Upgraded  | 3.5.0  | 3.5.3  |
-| @eslint/plugin-kit/node_modules/@eslint/core |  Removed  | 0.10.0 |        |
-
----
-
-</details>
 <details><summary>👉 Example with No Changes</summary>
 
 ---
@@ -193,8 +174,8 @@ This outputs the changes `json` object and the `markdown` table.
 
 - name: 'Echo Output'
   env:
-    JSON: ${{ steps.test.outputs.json }}
-    MARKDOWN: ${{ steps.test.outputs.markdown }}
+    JSON: ${{ steps.changelog.outputs.json }}
+    MARKDOWN: ${{ steps.changelog.outputs.markdown }}
   run: |
     echo "json: '${{ env.JSON }}'"
     echo "markdown: '${{ env.MARKDOWN }}'"
@@ -241,9 +222,12 @@ More Output Examples Coming Soon...
     update: false
 
 - name: 'Echo Output'
+  env:
+    JSON: ${{ steps.changelog.outputs.json }}
+    MARKDOWN: ${{ steps.changelog.outputs.markdown }}
   run: |
-    echo "json: '${{ steps.changelog.outputs.json }}'"
-    echo "markdown: '${{ steps.changelog.outputs.markdown }}'"
+    echo "json: '${{ env.JSON }}'"
+    echo "markdown: '${{ env.MARKDOWN }}'"
 ```
 
 </details>
@@ -295,7 +279,7 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 - Sorts into 5 categories: Added, Upgraded, Downgraded, Removed, Unknown, Unchanged.
 - Option to include Unchanged packages (disabled by default).
 - Option to display results initially expanded or collapsed.
-- Option to customize the heading and toggle text.
+- Option to customize columns displayed and their order.
 - Outputs changes in JSON and markdown.
 
 ### Planned

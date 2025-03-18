@@ -26,31 +26,32 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Debug event.json"
-        run: |
-          cat "${GITHUB_EVENT_PATH}"
+      #- name: "Debug event.json"
+      #  run: |
+      #    cat "${GITHUB_EVENT_PATH}"
 
       - name: "Test Local Action"
         id: test
         uses: ./
         with:
-          open: true
-          #heading: ""
           update: false
+          open: true
           #unchanged: true
-          icons: false
+          #heading: ""
+          #toggle: Toggle Me
+          columns: "n,t,b,a"
 
       - name: "Verify Outputs"
         env:
           JSON: ${{ steps.test.outputs.json }}
           MARKDOWN: ${{ steps.test.outputs.markdown }}
         run: |
-          echo "json: '${{ env.JSON }}'"
+          #echo "json: '${{ env.JSON }}'"
           if [ -z '${{ env.JSON }}' ];then
             echo "No Output: json"
             exit 1
           fi
-          echo "markdown: '${{ env.MARKDOWN }}'"
+          #echo "markdown: '${{ env.MARKDOWN }}'"
           if [ -z '${{ env.MARKDOWN }}' ];then
             echo "No Output: markdown"
             exit 1

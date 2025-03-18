@@ -7,7 +7,7 @@ branding:
 
 inputs:
   path:
-    description: "Path to package-lock.json"
+    description: "Location of Lock File"
     required: false
     default: "package-lock.json"
   update:
@@ -18,18 +18,18 @@ inputs:
     description: "Release Notes Heading"
     required: false
     default: "### Package Changes"
-  text:
-    description: "Text for Summary Toggle"
-    required: true
+  toggle:
+    description: "Toggle Text for Summary"
+    required: false
     default: "Click Here to View Changes"
   open:
     description: "Summary Open by Default"
     required: false
     default: "false"
-  icons:
-    description: "Use Icons for Changes"
+  columns:
+    description: "Show Text in Table"
     required: false
-    default: "true"
+    default: "n,i,t,b,a"
   unchanged:
     description: "Include Unchanged Packages"
     required: false
@@ -39,7 +39,7 @@ inputs:
     required: false
     default: "30"
   summary:
-    description: "Add Summary to Job"
+    description: "Add Workflow Job Summary"
     required: false
     default: "true"
   token:

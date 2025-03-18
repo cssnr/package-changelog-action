@@ -66203,17 +66203,20 @@ const semverValid = __nccwpck_require__(8780)
 })()
 
 function genMarkdown(config, data) {
-    const icon = config.icons ? '❔' : 'Operation'
-    const table = markdownTable(
-        [['Package&nbsp;Name', icon, 'Before', 'After'], ...data],
-        { align: ['l', 'c', 'l', 'l'] }
-    )
+    const cols = []
+    const align = []
+    config.columns.forEach((c) => cols.push(colMap.t[c]))
+    config.columns.forEach((c) => align.push(colMap.a[c]))
+    console.log('cols:', cols)
+    console.log('align:', align)
+
+    const table = markdownTable([cols, ...data], { align })
     console.log('table:', table)
     let result = `${config.heading}\n\n`
     if (data.length) {
         const open = config.open ? ' open' : ''
         result +=
-            `<details${open}><summary>${config.text}</summary>\n\n` +
+            `<details${open}><summary>${config.toggle}</summary>\n\n` +
             `Changes for: [${config.path}](${config.path})\n\n${table}\n\n</details>\n`
     } else {
         result += `No changes detected in: [${config.path}](${config.path})`
@@ -66232,16 +66235,32 @@ function genTable(config, data) {
     if (config.unchanged) {
         sections.push({ key: 'unchanged', text: 'Unchanged', icon: '🔘' })
     }
-    const key = config.icons ? 'icon' : 'text'
     const results = []
-    for (const sect of sections) {
-        for (const item of data[sect.key]) {
-            console.log(`${sect.text}:`, item)
+    for (const section of sections) {
+        console.log('Processing section:', section)
+        for (const item of data[section.key]) {
+            // console.log('item:', item)
             let name = item.name
             if (item.name.startsWith('node_modules/')) {
                 name = name.slice(13)
             }
-            results.push([name, sect[key], item.before, item.after])
+            // console.log('name:', name)
+            const pkg = {
+                n: name,
+                i: section.icon,
+                t: section.text,
+                b: item.before,
+                a: item.after,
+            }
+            // console.log('pkg:', pkg)
+            const result = []
+            for (const key of config.columns) {
+                console.log('key:', key)
+                console.log('pkg[key]:', pkg[key])
+                result.push(pkg[key])
+            }
+            // console.log('result:', result)
+            results.push(result)
         }
     }
     // console.log('results:', results)
@@ -66305,6 +66324,7 @@ function addResults(results, type, name, current, previous) {
         1: 'upgraded',
         2: 'added',
         3: 'removed',
+        4: 'unknown',
     }
     results[status[type]].push({
         name,
@@ -66383,21 +66403,38 @@ async function addSummary(config, markdown) {
 
 /**
  * Get Config
- * @return {{ path: string, update: boolean, heading: string, text: string, open: boolean, unchanged: boolean, max: number, summary: boolean, token: string }}
+ * @return {{ path: string, update: boolean, heading: string, toggle: string, open: boolean, columns: array, unchanged: boolean, max: number, summary: boolean, token: string }}
  */
 function getConfig() {
     return {
-        path: core.getInput('path'),
+        path: core.getInput('path', { required: true }),
         update: core.getBooleanInput('update'),
         heading: core.getInput('heading'),
-        text: core.getInput('text'),
+        toggle: core.getInput('toggle', { required: true }),
         open: core.getBooleanInput('open'),
-        icons: core.getBooleanInput('icons'),
+        columns: core.getInput('columns', { required: true }).split(','),
         unchanged: core.getBooleanInput('unchanged'),
-        max: parseInt(core.getInput('max')),
+        max: parseInt(core.getInput('max', { required: true })),
         summary: core.getBooleanInput('summary'),
         token: core.getInput('token', { required: true }),
     }
+}
+
+const colMap = {
+    t: {
+        n: 'Package&nbsp;Name',
+        i: '❔',
+        t: 'Operation',
+        b: 'Before',
+        a: 'After',
+    },
+    a: {
+        n: 'l',
+        i: 'c',
+        t: 'c',
+        b: 'l',
+        a: 'l',
+    },
 }
 
 })();

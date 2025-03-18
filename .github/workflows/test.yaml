@@ -47,12 +47,12 @@ jobs:
           JSON: ${{ steps.test.outputs.json }}
           MARKDOWN: ${{ steps.test.outputs.markdown }}
         run: |
-          #echo "json: '${{ env.JSON }}'"
+          #echo "json: ${{ env.JSON }}"
           if [ -z '${{ env.JSON }}' ];then
             echo "No Output: json"
             exit 1
           fi
-          #echo "markdown: '${{ env.MARKDOWN }}'"
+          #echo "markdown: ${{ env.MARKDOWN }}"
           if [ -z '${{ env.MARKDOWN }}' ];then
             echo "No Output: markdown"
             exit 1

@@ -367,12 +367,12 @@ const maps = {
         a: { align: 'l', col: 'After' },
     },
     sec: {
-        a: { key: 'added', text: 'Added', icon: '🆕' },
-        u: { key: 'upgraded', text: 'Upgraded', icon: '✅' },
-        d: { key: 'downgraded', text: 'Downgraded', icon: '⚠️' },
-        r: { key: 'removed', text: 'Removed', icon: '⛔' },
-        k: { key: 'unknown', text: 'Unknown', icon: '❓' },
-        n: { key: 'unchanged', text: 'Unchanged', icon: '🔘' },
+        a: { icon: '🆕', text: 'Added', key: 'added' },
+        u: { icon: '✅', text: 'Upgraded', key: 'upgraded' },
+        d: { icon: '⚠️', text: 'Downgraded', key: 'downgraded' },
+        r: { icon: '⛔', text: 'Removed', key: 'removed' },
+        k: { icon: '❓', text: 'Unknown', key: 'unknown' },
+        n: { icon: '🔘', text: 'Unchanged', key: 'unchanged' },
     },
 }
 

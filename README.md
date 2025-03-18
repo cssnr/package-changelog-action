@@ -36,7 +36,7 @@ between the current and previous release and update the release notes with a tab
 On a prerelease it compares with the previous release, on a non-prerelease release,
 it compares with the previous non-prerelease.
 
-Packages get sorted into the following categories:
+Packages get sorted into the following categories and columns:
 
 | Name        | ❔  | Operation  | Before   | After   |
 | :---------- | :-: | :--------- | :------- | :------ |
@@ -44,10 +44,12 @@ Packages get sorted into the following categories:
 | @upgrade    | ✅  | Upgraded   | previous | current |
 | @downgraded | ⚠️  | Downgraded | previous | current |
 | @removed    | ⛔  | Removed    | previous |         |
-| @unknown    | ❓  | Unknown    |          |         |
+| @unknown    | ❓  | Unknown    | previous | current |
 | @unchanged  | 🔘  | Unchanged  | previous | current |
 
-See more [Changelog Examples](#Changelog-Examples) below and view the [Changelog Options](#Changelog-Options).
+> [!TIP]  
+> Both Columns and Section Order and Visibility can be Customized!  
+> See [Changelog Options](#Changelog-Options) and [Changelog Examples](#Changelog-Examples) for more...
 
 ## Inputs
 
@@ -71,41 +73,42 @@ You can add this to your release workflow with no inputs.
   uses: smashedr/package-changelog-action@master
 ```
 
-Use the options below to customize the output.
+See the [Changelog Options](#Changelog-Options) to customize the results.
 
 ### Changelog Options
 
 **update:** Set this to `false` if you only want to use the [Outputs](#Outputs).
 
-**heading/toggle:** You can set the `heading` to an empty string to remove it.
-The `toggle` must be set to a non-empty string if setting this input.
+**heading:** You can customize the `heading` or set to an empty string to remove it.
 
-**columns:** Customize column visibility and order. Currently,
-this must be a perfectly formatted CSV with any combination of the letters:
+**toggle:** The `toggle` must be set to a non-empty string if changing this input.
+
+**open:** Set summary to be open by default (note the first example below is open).
+
+**columns:** Customize column visibility and order. This must be a perfectly formatted CSV with any combination of these keys:
 
 Default value: `n,i,t,b,a`
 
-| Letter | Column       | Description           |
-| :----: | :----------- | :-------------------- |
-|  `n`   | Package Name | Name of the package   |
-|  `i`   | ❔           | Icon of the outcome   |
-|  `t`   | Outcome      | Text of the outcome   |
-|  `b`   | Before       | Version before change |
-|  `a`   | After        | Version after change  |
+| Key | Column       | Column&nbsp;Description |
+| :-: | :----------- | :---------------------- |
+| `n` | Package Name | Name of the package     |
+| `i` | ❔           | Icon of the outcome     |
+| `t` | Outcome      | Text of the outcome     |
+| `b` | Before       | Version before change   |
+| `a` | After        | Version after change    |
 
-**sections:** Customize section visibility and order. Currently,
-this must be a perfectly formatted CSV with any combination of the letters:
+**sections:** Customize section visibility and order. This must be a perfectly formatted CSV with any combination of these keys:
 
 Default value: `a,u,d,r,k`
 
-| Letter | Section    | Description                |
-| :----: | :--------- | :------------------------- |
-|  `a`   | Added      | Packages was added         |
-|  `u`   | Upgraded   | Package was upgraded       |
-|  `d`   | Downgraded | Package was downgraded     |
-|  `r`   | Removed    | Package was removed        |
-|  `k`   | Unknown    | Package has invalid semver |
-|  `n`   | Unchanged  | Package not changed        |
+| Key | Section    | Section&nbsp;Description    |
+| :-: | :--------- | :-------------------------- |
+| `a` | Added      | Newly added package         |
+| `u` | Upgraded   | Updated package version     |
+| `d` | Downgraded | Downgraded package version  |
+| `r` | Removed    | Removed package             |
+| `k` | Unknown    | Invalid semantic version    |
+| `n` | Unchanged  | Package version not changed |
 
 Note: Enabling Unchanged `n` packages can produce a very long list.
 
@@ -121,19 +124,17 @@ const maps = {
     a: { align: 'l', col: 'After' },
   },
   sec: {
-    a: { key: 'added', text: 'Added', icon: '🆕' },
-    u: { key: 'upgraded', text: 'Upgraded', icon: '✅' },
-    d: { key: 'downgraded', text: 'Downgraded', icon: '⚠️' },
-    r: { key: 'removed', text: 'Removed', icon: '⛔' },
-    k: { key: 'unknown', text: 'Unknown', icon: '❓' },
-    n: { key: 'unchanged', text: 'Unchanged', icon: '🔘' },
+    a: { icon: '🆕', text: 'Added', key: 'added' },
+    u: { icon: '✅', text: 'Upgraded', key: 'upgraded' },
+    d: { icon: '⚠️', text: 'Downgraded', key: 'downgraded' },
+    r: { icon: '⛔', text: 'Removed', key: 'removed' },
+    k: { icon: '❓', text: 'Unknown', key: 'unknown' },
+    n: { icon: '🔘', text: 'Unchanged', key: 'unchanged' },
   },
 }
 ```
 
 </details>
-
-**open:** Set summary to be open by default (note the first example below is open).
 
 ### Changelog Examples
 
@@ -141,7 +142,7 @@ const maps = {
 
 _Note: Examples are generated with an empty header and default values._
 
-<details open><summary>👉 Default Example</summary>
+<details open><summary>🔷 Default Example</summary>
 
 ---
 
@@ -175,7 +176,7 @@ Changes for: [package-lock.json](package-lock.json)
 ---
 
 </details>
-<details><summary>👉 Example with No Changes</summary>
+<details><summary>🔷 Example with No Changes</summary>
 
 ---
 
@@ -186,6 +187,8 @@ No changes detected in: [package-lock.json](package-lock.json)
 </details>
 
 More Changelog Examples Coming Soon...
+
+For more options, see the [Changelog Options](#Changelog-Options).
 
 ### Permissions
 
@@ -221,6 +224,21 @@ This outputs the changes `json` object and the `markdown` table.
 
 Note: due to the way `${{}}` expressions are evaluated, multi-line output gets executed in a run block.
 
+<details><summary>JSON Schema</summary>
+
+```json
+{
+  "added": [{ "name": "", "after": "" }],
+  "downgraded": [{ "name": "", "before": "", "after": "" }],
+  "removed": [{ "name": "", "before": "" }],
+  "unchanged": [{ "name": "", "before": "", "after": "" }],
+  "unknown": [{ "name": "", "before": "", "after": "" }],
+  "upgraded": [{ "name": "", "before": "", "after": "" }]
+}
+```
+
+</details>
+
 More Output Examples Coming Soon...
 
 ## Examples
@@ -237,17 +255,28 @@ More Output Examples Coming Soon...
 ```
 
 </details>
-<details><summary>Detailed Custom Heading</summary>
+<details><summary>Custom Column Order</summary>
 
 ```yaml
 - name: 'Package Changelog Action'
   uses: smashedr/package-changelog-action@master
   with:
-    heading: |
-      ---
-
-      # Package Changes
+    columns: 'n,t,b,a'
 ```
+
+This removes the icon column.
+
+</details>
+<details><summary>Custom Column Order</summary>
+
+```yaml
+- name: 'Package Changelog Action'
+  uses: smashedr/package-changelog-action@master
+  with:
+    sections: 'u,a,d,r,k'
+```
+
+This changes the section order to put Updated before Added.
 
 </details>
 <details><summary>Use Outputs Only</summary>
@@ -314,18 +343,19 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 ## Features
 
 - Automatically parse differences between package-lock.json changes between releases.
-- Sorts into 5 categories: Added, Upgraded, Downgraded, Removed, Unknown, Unchanged.
-- Option to include Unchanged packages (disabled by default).
-- Option to display results initially expanded or collapsed.
-- Option to customize columns displayed and their order.
+- Sorts into sections: Added, Upgraded, Downgraded, Removed, Unknown, Unchanged.
+- Option to customize sections visibility and sections order.
+- Option to customize columns visibility and columns order.
+- Option to display results expanded or collapsed.
 - Outputs changes in JSON and markdown.
 
 ### Planned
 
-- Work on Pull Requests.
-- Work on Workflow Dispatch.
-- Custom Category Order.
-- Custom Section Icons.
+- Work on Pull Requests
+- Work on Workflow Dispatch
+- Custom Column Alignment
+- Custom Column Titles
+- Custom Section Icons
 
 # Support
 

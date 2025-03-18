@@ -11,7 +11,7 @@ inputs:
     required: false
     default: "package-lock.json"
   update:
-    description: "Add Summary to Job"
+    description: "Update Release Notes"
     required: false
     default: "true"
   heading:
@@ -26,6 +26,14 @@ inputs:
     description: "Summary Open by Default"
     required: false
     default: "false"
+  unchanged:
+    description: "Include Unchanged Packages"
+    required: false
+    default: "false"
+  max:
+    description: "Max Releases to Process"
+    required: false
+    default: "30"
   summary:
     description: "Add Summary to Job"
     required: false

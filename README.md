@@ -22,6 +22,7 @@
 - [Examples](#Examples)
 - [Tags](#Tags)
 - [Features](#Features)
+  - [Planned](#Planned)
 - [Support](#Support)
 - [Contributing](#Contributing)
 
@@ -30,26 +31,44 @@ Action to Generate Package Changelog.
 On a release, this action will parse the differences in the provided `package-lock.json` file
 between the current and previous release and update the release notes with a table of changes.
 
+On a prerelease it compares with the previous release, on a non-prerelease release,
+it compares with the previous non-prerelease.
+
+Packages get sorted into the following categories:
+
+| Package    | ❔  | Before   | After   |
+| :--------- | :-: | :------- | :------ |
+| Added      | 🆕  |          | current |
+| Upgraded   | ✅  | previous | current |
+| Downgraded | ⚠️  | previous | current |
+| Removed    | ⛔  | previous |         |
+| Unknown    | ❓  |          |         |
+| Unchanged  | 🔘  | previous | current |
+
+Unchanged is disabled by default and Unknown happens when a semantic version is invalid.
+
 ## Inputs
 
-| Input   | Req. | Default&nbsp;Value           | Input&nbsp;Description   |
-| :------ | :--: | :--------------------------- | :----------------------- |
-| path    |  -   | `package-lock.json`          | Location of package file |
-| update  |  -   | `true`                       | Update Release Notes \*  |
-| heading |  -   | `### Package Changes`        | Release notes heading    |
-| text    |  -   | `Click Here to View Changes` | Summary Toggle Text      |
-| open    |  -   | `false`                      | Summary Open by Default  |
-| summary |  -   | `true`                       | Add Summary to Job       |
-| token   |  -   | `github.token`               | For use with a PAT [^1]  |
+| Input     | Req. | Default&nbsp;Value           | Input&nbsp;Description     |
+| :-------- | :--: | :--------------------------- | :------------------------- |
+| path      |  -   | `package-lock.json`          | Location of Lock file      |
+| update    |  -   | `true`                       | Update Release Notes \*    |
+| heading   |  -   | `### Package Changes`        | Release Notes Heading \*   |
+| text      |  -   | `Click Here to View Changes` | Summary Toggle Text \*     |
+| open      |  -   | `false`                      | Summary Open by Default    |
+| unchanged |  -   | `false`                      | Include Unchanged Packages |
+| max       |  -   | `30`                         | Max Releases to Process    |
+| summary   |  -   | `true`                       | Add Summary to Job         |
+| token     |  -   | `github.token`               | For use with a PAT [^1]    |
 
 **update:** Set this to `false` if you only want to use the [Outputs](#Outputs).
 
 **heading/text:** You can set the `heading` to an empty string to remove it.
-The `text` must be unset (default) or set to a non-empty string.
+The `text` must be set to a non-empty string if setting.
 
 **summary:** Will add the results to the job summary in the workflow results.
 
-<details><summary>Example Release Notes Update</summary>
+<details><summary>View an Example Release Notes Update</summary>
 
 ---
 
@@ -86,7 +105,7 @@ Changes for: [package-lock.json](package-lock.json)
 
 </details>
 
-<details><summary>Example Release Notes Update Without Changes</summary>
+<details><summary>Example Release Notes Update with No Changes</summary>
 
 ---
 
@@ -228,7 +247,19 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 
 ## Features
 
-- Coming Soon...
+- Automatically parse differences between package-lock.json changes between releases.
+- Sorts into 5 categories: Added, Upgraded, Downgraded, Removed, Unknown, Unchanged.
+- Option to include Unchanged packages (disabled by default).
+- Option to display results initially expanded or collapsed.
+- Option to customize the heading and toggle text.
+- Outputs changes in JSON and markdown.
+
+### Planned
+
+- Work on Pull Requests.
+- Work on Workflow Dispatch.
+- Custom Category Order.
+- Custom Section Icons.
 
 # Support
 

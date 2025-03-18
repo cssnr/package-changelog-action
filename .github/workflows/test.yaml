@@ -37,6 +37,7 @@ jobs:
           open: true
           #heading: ""
           update: false
+          #unchanged: true
 
       - name: "Verify Outputs"
         env:

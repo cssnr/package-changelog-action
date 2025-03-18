@@ -8,6 +8,7 @@ const { Base64 } = require('js-base64')
 const PackageLockParser =
     require('snyk-nodejs-lockfile-parser/dist/parsers/package-lock-parser').PackageLockParser
 const semverCompare = require('semver/functions/compare')
+const semverValid = require('semver/functions/valid')
 
 import { markdownTable } from 'markdown-table'
 
@@ -26,17 +27,14 @@ import { markdownTable } from 'markdown-table'
 
         // Debug
         core.startGroup('Debug')
-        console.log('github.context.ref:', github.context.ref)
-        console.log('github.context.eventName:', github.context.eventName)
         console.log('github.context.payload.repo:', github.context.repo)
+        console.log('github.context.eventName:', github.context.eventName)
+        console.log('github.context.ref:', github.context.ref)
         core.endGroup() // Debug
 
         if (github.context.eventName !== 'release') {
             return core.warning(`Skipping event: ${github.context.eventName}`)
         }
-        // if (github.context.payload.release.prerelease) {
-        //     return core.warning(`Skipping prerelease.`)
-        // }
 
         // Get Config
         const config = getConfig()
@@ -44,19 +42,27 @@ import { markdownTable } from 'markdown-table'
         console.log(config)
         core.endGroup() // Config
 
+        if (!config.max || config.max > 100) {
+            return core.setFailed('The max must be between 1 and 100.')
+        }
+
         // Set Variables
         const octokit = github.getOctokit(config.token)
         const packageLockParser = new PackageLockParser()
 
-        // Get Releases
-        console.log('config.release_id:', config.release_id)
+        // STAGE 1 - Parsing Event and Current/Previous Tags (may have to use hashes)
+
+        // Process Releases Event
+        console.log('release_id:', github.context.payload.release.id)
         const [current, previous] = await getReleases(config, octokit)
-        core.startGroup('Current Releases')
-        console.log(current)
-        core.endGroup() // Current Releases
-        core.startGroup('Previous Releases')
-        console.log(previous)
-        core.endGroup() // Previous Releases
+
+        // core.startGroup('Current Releases')
+        // console.log(current)
+        // core.endGroup() // Current Releases
+        // core.startGroup('Previous Releases')
+        // console.log(previous)
+        // core.endGroup() // Previous Releases
+
         if (!current) {
             return core.setFailed('Current Release Not Found!')
         }
@@ -66,15 +72,9 @@ import { markdownTable } from 'markdown-table'
         console.log('Current Tag:', current.tag_name)
         console.log('Previous Tag:', previous.tag_name)
 
-        // // Parse lockPath
-        // console.log('config.path:', config.path)
-        // const lockPath = path.resolve(process.cwd(), config.path)
-        // console.log('lockPath:', lockPath)
-        // if (!fs.existsSync(lockPath)) {
-        //     return core.setFailed(`Unable to find lock file: ${config.path}`)
-        // }
+        // STAGE 2 - Processing Lock Files
 
-        // CURRENT
+        // Current
         const currentLockData = await octokit.rest.repos.getContent({
             ...github.context.repo,
             // path: getBasePath(config.path),
@@ -88,11 +88,11 @@ import { markdownTable } from 'markdown-table'
         }
         const currentLockContent = Base64.decode(currentLockData.data.content)
         // console.log('lockContent:', lockContent)
-        // CURRENT LOCK FILE - parseLockFile
+        // Current - parseLockFile
         const currentLock = packageLockParser.parseLockFile(currentLockContent)
         // console.log('currentLock:', currentLock)
 
-        // PREVIOUS
+        // Previous
         const prevLockData = await octokit.rest.repos.getContent({
             ...github.context.repo,
             // path: getBasePath(config.path),
@@ -102,18 +102,29 @@ import { markdownTable } from 'markdown-table'
         })
         // console.log('prevLockData:', prevLockData)
         if (!prevLockData.data?.content) {
-            return core.setFailed('Unable to parse base lock file.')
+            return core.setFailed('Unable to parse previous lock file.')
         }
         const prevLockContent = Base64.decode(prevLockData.data.content)
         // console.log('prevLockContent:', prevLockContent)
-        // OLD LOCK FILE - prevLock
+        // Previous - prevLock
         const prevLock = packageLockParser.parseLockFile(prevLockContent)
         // console.log('prevLock:', prevLock)
+
+        // // For use with pull_request events
+        // // Parse lockPath
+        // console.log('config.path:', config.path)
+        // const lockPath = path.resolve(process.cwd(), config.path)
+        // console.log('lockPath:', lockPath)
+        // if (!fs.existsSync(lockPath)) {
+        //     return core.setFailed(`Unable to find lock file: ${config.path}`)
+        // }
+
+        // STAGE 3 - Process Results
 
         // Parse Changes
         const lockChanges = diffLocks(prevLock, currentLock)
         // console.log('lockChanges:', lockChanges)
-        const tableData = genTable(lockChanges)
+        const tableData = genTable(config, lockChanges)
         // console.log('tableData:', tableData)
         const markdown = genMarkdown(config, tableData)
         console.log('markdown:', markdown)
@@ -133,7 +144,7 @@ import { markdownTable } from 'markdown-table'
             core.info('⌛ \u001b[33;1mUpdating Release Now...')
             await octokit.rest.repos.updateRelease({
                 ...github.context.repo,
-                release_id: config.release_id,
+                release_id: github.context.payload.release.id,
                 body,
             })
         } else {
@@ -178,13 +189,17 @@ function genMarkdown(config, data) {
     return result
 }
 
-function genTable(data) {
+function genTable(config, data) {
     const sections = [
         { key: 'added', head: 'Added', icon: '🆕' },
         { key: 'upgraded', head: 'Upgraded', icon: '✅' },
         { key: 'downgraded', head: 'Downgraded', icon: '⚠️' },
         { key: 'removed', head: 'Removed', icon: '⛔' },
+        { key: 'unknown', head: 'Unknown', icon: '❓' },
     ]
+    if (config.unchanged) {
+        sections.push({ key: 'unchanged', head: 'Unchanged', icon: '🔘' })
+    }
     const results = []
     for (const sect of sections) {
         for (const item of data[sect.key]) {
@@ -201,11 +216,11 @@ function genTable(data) {
 }
 
 function diffLocks(previous, current) {
-    // console.log('previous:', previous)
     // console.log('previous.packages:', previous.packages)
-    // console.log('current:', current)
     // console.log('current.packages:', current.packages)
     if (!previous.packages || !current.packages) {
+        console.log('previous:', previous)
+        console.log('current:', current)
         throw new Error('No previous or current packages.')
     }
     const results = {
@@ -214,6 +229,7 @@ function diffLocks(previous, current) {
         upgraded: [], // 1
         added: [], // 2
         removed: [], // 3
+        unknown: [], // 4
     }
     for (const [name, data] of Object.entries(current.packages)) {
         if (!name) {
@@ -224,6 +240,12 @@ function diffLocks(previous, current) {
         const previousData = previous.packages[name]
         // console.log('previousData:', previousData)
         if (previousData) {
+            if (
+                !semverValid(data.version) ||
+                !semverValid(previousData.version)
+            ) {
+                addResults(results, 4, name, data)
+            }
             const cmp = semverCompare(data.version, previousData.version)
             addResults(results, cmp, name, data, previousData)
         } else {
@@ -267,23 +289,32 @@ function addResults(results, type, name, current, previous) {
 async function getReleases(config, octokit) {
     const releases = await octokit.rest.repos.listReleases({
         ...github.context.repo,
+        per_page: config.max,
     })
-    core.startGroup('Last 30 Releases (debugging)')
-    console.log(releases.data)
-    core.endGroup() // Releases
+    // core.startGroup('Releases')
+    // console.log(releases.data)
+    // core.endGroup() // Releases
 
     let previous
     let current
-    let found = 0
     for (const release of releases.data) {
-        // console.debug('release:', release)
-        if (found) {
+        console.debug('--- Processing:', release.tag_name)
+        if (current) {
+            if (current.prerelease) {
+                console.log('Previous Release:', release.tag_name)
+                previous = release
+                break
+            }
+            if (release.prerelease) {
+                continue
+            }
+            console.log('Previous Release:', release.tag_name)
             previous = release
             break
         }
-        if (release.id === config.release_id) {
+        if (release.id === github.context.payload.release.id) {
+            console.log('Current Release:', release.tag_name)
             current = release
-            found = 1
         }
     }
     return [current, previous]
@@ -297,7 +328,6 @@ async function getReleases(config, octokit) {
  */
 async function addSummary(config, markdown) {
     core.summary.addRaw('## Package Changelog Action\n\n')
-    core.summary.addRaw('🚀 We Did It Red It!\n\n')
 
     // core.summary.addRaw('<details><summary>Changelog</summary>')
     // core.summary.addRaw(`\n\n${markdown}\n\n`)
@@ -320,7 +350,7 @@ async function addSummary(config, markdown) {
 
 /**
  * Get Config
- * @return {{ path: string, update: boolean, heading: string, text: string, open: boolean, summary: boolean, token: string, release_id: number }}
+ * @return {{ path: string, update: boolean, heading: string, text: string, open: boolean, unchanged: boolean, max: number, summary: boolean, token: string }}
  */
 function getConfig() {
     return {
@@ -329,8 +359,9 @@ function getConfig() {
         heading: core.getInput('heading'),
         text: core.getInput('text'),
         open: core.getBooleanInput('open'),
+        unchanged: core.getBooleanInput('unchanged'),
+        max: parseInt(core.getInput('max')),
         summary: core.getBooleanInput('summary'),
         token: core.getInput('token', { required: true }),
-        release_id: github.context.payload.release.id,
     }
 }

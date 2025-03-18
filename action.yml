@@ -26,6 +26,10 @@ inputs:
     description: "Summary Open by Default"
     required: false
     default: "false"
+  icons:
+    description: "Use Icons for Changes"
+    required: false
+    default: "true"
   unchanged:
     description: "Include Unchanged Packages"
     required: false

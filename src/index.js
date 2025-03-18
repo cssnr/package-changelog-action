@@ -172,8 +172,9 @@ import { markdownTable } from 'markdown-table'
 })()
 
 function genMarkdown(config, data) {
+    const icon = config.icons ? '❔' : 'Operation'
     const table = markdownTable(
-        [['Package&nbsp;Name', '❔', 'Before', 'After'], ...data],
+        [['Package&nbsp;Name', icon, 'Before', 'After'], ...data],
         { align: ['l', 'c', 'l', 'l'] }
     )
     console.log('table:', table)
@@ -191,24 +192,25 @@ function genMarkdown(config, data) {
 
 function genTable(config, data) {
     const sections = [
-        { key: 'added', head: 'Added', icon: '🆕' },
-        { key: 'upgraded', head: 'Upgraded', icon: '✅' },
-        { key: 'downgraded', head: 'Downgraded', icon: '⚠️' },
-        { key: 'removed', head: 'Removed', icon: '⛔' },
-        { key: 'unknown', head: 'Unknown', icon: '❓' },
+        { key: 'added', text: 'Added', icon: '🆕' },
+        { key: 'upgraded', text: 'Upgraded', icon: '✅' },
+        { key: 'downgraded', text: 'Downgraded', icon: '⚠️' },
+        { key: 'removed', text: 'Removed', icon: '⛔' },
+        { key: 'unknown', text: 'Unknown', icon: '❓' },
     ]
     if (config.unchanged) {
-        sections.push({ key: 'unchanged', head: 'Unchanged', icon: '🔘' })
+        sections.push({ key: 'unchanged', text: 'Unchanged', icon: '🔘' })
     }
+    const key = config.icons ? 'icon' : 'text'
     const results = []
     for (const sect of sections) {
         for (const item of data[sect.key]) {
-            console.log(`${sect.head}:`, item)
+            console.log(`${sect.text}:`, item)
             let name = item.name
             if (item.name.startsWith('node_modules/')) {
                 name = name.slice(13)
             }
-            results.push([name, sect.icon, item.before, item.after])
+            results.push([name, sect[key], item.before, item.after])
         }
     }
     // console.log('results:', results)
@@ -359,6 +361,7 @@ function getConfig() {
         heading: core.getInput('heading'),
         text: core.getInput('text'),
         open: core.getBooleanInput('open'),
+        icons: core.getBooleanInput('icons'),
         unchanged: core.getBooleanInput('unchanged'),
         max: parseInt(core.getInput('max')),
         summary: core.getBooleanInput('summary'),

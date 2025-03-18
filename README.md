@@ -17,6 +17,7 @@
 # Package Changelog Action
 
 - [Inputs](#Inputs)
+  - [Changelog Options](#Changelog-Options)
   - [Changelog Examples](#Changelog-Examples)
   - [Permissions](#Permissions)
 - [Outputs](#Outputs)
@@ -52,17 +53,18 @@ See more [Changelog Examples](#Changelog-Examples) below.
 
 ## Inputs
 
-| Input     | Req. | Default&nbsp;Value           | Input&nbsp;Description                               |
-| :-------- | :--: | :--------------------------- | :--------------------------------------------------- |
-| path      |  -   | `package-lock.json`          | Location of Lock file                                |
-| update    |  -   | `true`                       | Update Release Notes [⤵️](#Changelog-Examples)       |
-| heading   |  -   | `### Package Changes`        | Release Notes Heading [⤵️](#Changelog-Examples)      |
-| text      |  -   | `Click Here to View Changes` | Summary Toggle Text [⤵️](#Changelog-Examples)        |
-| open      |  -   | `false`                      | Summary Open by Default [⤵️](#Changelog-Examples)    |
-| unchanged |  -   | `false`                      | Include Unchanged Packages [⤵️](#Changelog-Examples) |
-| max       |  -   | `30`                         | Max Releases to Process                              |
-| summary   |  -   | `true`                       | Add Summary to Job                                   |
-| token     |  -   | `github.token`               | For use with a PAT                                   |
+| Input     | Req. | Default&nbsp;Value           | Input&nbsp;Description                              |
+| :-------- | :--: | :--------------------------- | :-------------------------------------------------- |
+| path      |  -   | `package-lock.json`          | Location of Lock file                               |
+| update    |  -   | `true`                       | Update Release Notes [⤵️](#Changelog-Examples)      |
+| heading   |  -   | `### Package Changes`        | Release Notes Heading [⤵️](#Changelog-Options)      |
+| text      |  -   | `Click Here to View Changes` | Summary Toggle Text [⤵️](#Changelog-Options)        |
+| open      |  -   | `false`                      | Summary Open by Default [⤵️](#Changelog-Options)    |
+| icons     |  -   | `true`                       | Use Icons for Changes [⤵️](#Changelog-Options)      |
+| unchanged |  -   | `false`                      | Include Unchanged Packages [⤵️](#Changelog-Options) |
+| max       |  -   | `30`                         | Max Releases to Process                             |
+| summary   |  -   | `true`                       | Add Summary to Job                                  |
+| token     |  -   | `github.token`               | For use with a PAT                                  |
 
 You can add this to your release workflow with no inputs.
 
@@ -71,7 +73,7 @@ You can add this to your release workflow with no inputs.
   uses: smashedr/package-changelog-action@master
 ```
 
-### Changelog Examples
+### Changelog Options
 
 **update:** Set this to `false` if you only want to use the [Outputs](#Outputs).
 
@@ -80,11 +82,17 @@ The `text` must be set to a non-empty string if setting.
 
 **open:** Set summary to be open by default (note the first example below is open).
 
+**icons:** Set this to `false` to use Text instead of Icon for the change operation.
+
 **unchanged:** Set this to `true` to include unchanged packages. This can be long...
+
+### Changelog Examples
+
+💡 _Click on an example heading to expand or collapse the example._
 
 _Note: Examples are generated with an empty header and default values._
 
-<details open><summary>View an Example Release Notes Update</summary>
+<details open><summary>👉 Default Example</summary>
 
 ---
 
@@ -118,8 +126,37 @@ Changes for: [package-lock.json](package-lock.json)
 ---
 
 </details>
+<details><summary>👉 Example with Icons False</summary>
 
-<details><summary>Example Release Notes Update with No Changes</summary>
+---
+
+Changes for: [package-lock.json](package-lock.json)
+
+| Package&nbsp;Name                            | Operation | Before | After  |
+| :------------------------------------------- | :-------: | :----- | :----- |
+| @eslint/config-helpers                       |   Added   |        | 0.1.0  |
+| @eslint-community/eslint-utils               | Upgraded  | 4.4.1  | 4.5.1  |
+| @eslint/core                                 | Upgraded  | 0.11.0 | 0.12.0 |
+| @eslint/eslintrc                             | Upgraded  | 3.2.0  | 3.3.0  |
+| @eslint/js                                   | Upgraded  | 9.20.0 | 9.22.0 |
+| @eslint/plugin-kit                           | Upgraded  | 0.2.5  | 0.2.7  |
+| @humanwhocodes/retry                         | Upgraded  | 0.4.1  | 0.4.2  |
+| @octokit/endpoint                            | Upgraded  | 9.0.5  | 9.0.6  |
+| @octokit/graphql                             | Upgraded  | 7.1.0  | 7.1.1  |
+| @octokit/plugin-paginate-rest                | Upgraded  | 9.2.1  | 9.2.2  |
+| @octokit/request                             | Upgraded  | 8.4.0  | 8.4.1  |
+| @octokit/request-error                       | Upgraded  | 5.1.0  | 5.1.1  |
+| acorn                                        | Upgraded  | 8.14.0 | 8.14.1 |
+| eslint                                       | Upgraded  | 9.20.1 | 9.22.0 |
+| eslint-scope                                 | Upgraded  | 8.2.0  | 8.3.0  |
+| flatted                                      | Upgraded  | 3.3.2  | 3.3.3  |
+| prettier                                     | Upgraded  | 3.5.0  | 3.5.3  |
+| @eslint/plugin-kit/node_modules/@eslint/core |  Removed  | 0.10.0 |        |
+
+---
+
+</details>
+<details><summary>👉 Example with No Changes</summary>
 
 ---
 

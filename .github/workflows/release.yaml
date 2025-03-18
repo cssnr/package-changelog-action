@@ -13,6 +13,11 @@ jobs:
       contents: write
 
     steps:
+      - name: "Debug event.json"
+        continue-on-error: true
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
+
       - name: "Update Tags"
         id: tags
         uses: cssnr/update-version-tags-action@v1

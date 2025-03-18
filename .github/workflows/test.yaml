@@ -39,14 +39,17 @@ jobs:
           update: false
 
       - name: "Verify Outputs"
+        env:
+          JSON: ${{ steps.test.outputs.json }}
+          MARKDOWN: ${{ steps.test.outputs.markdown }}
         run: |
-          #echo "json: '${{ steps.test.outputs.json }}'"
-          if [ -z '${{ steps.test.outputs.json }}' ];then
+          echo "json: '${{ env.JSON }}'"
+          if [ -z '${{ env.JSON }}' ];then
             echo "No Output: json"
             exit 1
           fi
-          echo "markdown: '${{ steps.test.outputs.markdown }}'"
-          if [ -z '${{ steps.test.outputs.markdown }}' ];then
+          echo "markdown: '${{ env.MARKDOWN }}'"
+          if [ -z '${{ env.MARKDOWN }}' ];then
             echo "No Output: markdown"
             exit 1
           fi

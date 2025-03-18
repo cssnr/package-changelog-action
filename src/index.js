@@ -173,7 +173,7 @@ function genMarkdown(config, data) {
             `<details${open}><summary>${config.text}</summary>\n\n` +
             `Changes for: [${config.path}](${config.path})\n\n${table}\n\n</details>\n`
     } else {
-        result += `No \`${config.path}\` changes detected.`
+        result += `No changes detected in: [${config.path}](${config.path})`
     }
     return result
 }

@@ -21,6 +21,7 @@
 - [Outputs](#Outputs)
 - [Examples](#Examples)
 - [Tags](#Tags)
+- [Features](#Features)
 - [Support](#Support)
 - [Contributing](#Contributing)
 
@@ -48,7 +49,7 @@ The `text` must be unset (default) or set to a non-empty string.
 
 **summary:** Will add the results to the job summary in the workflow results.
 
-<details><summary>👀 View Example Release Notes Update</summary>
+<details><summary>Example Release Notes Update</summary>
 
 ---
 
@@ -80,6 +81,18 @@ Changes for: [package-lock.json](package-lock.json)
 | @eslint/plugin-kit/node_modules/@eslint/core | ⛔  | 0.10.0 |        |
 
 </details>
+
+---
+
+</details>
+
+<details><summary>Example Release Notes Update Without Changes</summary>
+
+---
+
+### Package Changes
+
+No changes detected in: [package-lock.json](package-lock.json)
 
 ---
 
@@ -118,10 +131,15 @@ Output examples coming soon...
   uses: smashedr/package-changelog-action@master
 
 - name: 'Echo Output'
+  env:
+    JSON: ${{ steps.test.outputs.json }}
+    MARKDOWN: ${{ steps.test.outputs.markdown }}
   run: |
-    echo "json: '${{ steps.changelog.outputs.json }}'"
-    echo "markdown: '${{ steps.changelog.outputs.markdown }}'"
+    echo "json: '${{ env.JSON }}'"
+    echo "markdown: '${{ env.MARKDOWN }}'"
 ```
+
+Note: due to the way `${{}}` expressions are evaluated, multi-line output gets executed in a run block.
 
 ## Examples
 
@@ -207,6 +225,10 @@ You can view the release notes for each version on the [releases](https://github
 
 The **Major** tag is recommended. It is the most up-to-date and always backwards compatible.
 Breaking changes would result in a **Major** version bump. At a minimum you should use a **Minor** tag.
+
+## Features
+
+- Coming Soon...
 
 # Support
 

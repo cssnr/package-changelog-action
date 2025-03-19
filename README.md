@@ -71,7 +71,7 @@ You can add this to your release workflow with no inputs.
 ```yaml
 - name: 'Package Changelog Action'
   continue-on-error: true
-  uses: cssnr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@v1
 ```
 
 Note: `continue-on-error: true` is set here so your release workflow won't fail if processing the changelog fails.
@@ -214,7 +214,7 @@ This outputs the changes `json` object and the `markdown` table.
 ```yaml
 - name: 'Package Changelog Action'
   id: changelog
-  uses: cssnr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@v1
 
 - name: 'Echo Output'
   env:
@@ -252,7 +252,7 @@ More Output Examples Coming Soon...
 
 ```yaml
 - name: 'Package Changelog Action'
-  uses: cssnr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@v1
   with:
     heading: '**NPM Changelog**'
 ```
@@ -262,7 +262,7 @@ More Output Examples Coming Soon...
 
 ```yaml
 - name: 'Package Changelog Action'
-  uses: cssnr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@v1
   with:
     columns: 'n,t,b,a'
 ```
@@ -274,7 +274,7 @@ This removes the icon column.
 
 ```yaml
 - name: 'Package Changelog Action'
-  uses: cssnr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@v1
   with:
     sections: 'u,a,d,r,k'
 ```
@@ -287,7 +287,7 @@ This changes the section order to put Updated before Added.
 ```yaml
 - name: 'Package Changelog Action'
   id: changelog
-  uses: cssnr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@v1
   with:
     update: false
 
@@ -320,7 +320,7 @@ jobs:
 
     steps:
       - name: 'Package Changelog Action'
-        uses: cssnr/package-changelog-action@master
+        uses: cssnr/package-changelog-action@v1
         continue-on-error: true
 ```
 
@@ -359,6 +359,7 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 - Custom Column Alignment
 - Custom Column Titles
 - Custom Section Icons
+- Custom Section Text
 
 # Support
 

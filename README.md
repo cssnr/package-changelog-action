@@ -7,7 +7,7 @@
 [![Workflow lint](https://img.shields.io/github/actions/workflow/status/cssnr/package-changelog-action/lint.yaml?logo=github&label=lint)](https://github.com/cssnr/package-changelog-action/actions/workflows/lint.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_package-changelog-action&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=smashedr_package-changelog-action)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/package-changelog-action?logo=github&label=updated)](https://github.com/cssnr/package-changelog-action/graphs/commit-activity)
-[![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/shaner/package-changelog-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/shaner/package-changelog-action)
+[![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/package-changelog-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/package-changelog-action)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/package-changelog-action?logo=htmx)](https://github.com/cssnr/package-changelog-action)
 [![GitHub Forks](https://img.shields.io/github/forks/cssnr/package-changelog-action?style=flat&logo=github)](https://github.com/cssnr/package-changelog-action/forks)
 [![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/package-changelog-action?style=flat&logo=github)](https://github.com/cssnr/package-changelog-action/stargazers)

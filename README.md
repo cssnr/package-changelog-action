@@ -60,6 +60,7 @@ Packages get sorted into the following categories and columns:
 | heading  |  -   | `### Package Changes`        | Release Notes Heading [⤵️](#Changelog-Options)      |
 | toggle   |  -   | `Click Here to View Changes` | Toggle Text for Summary [⤵️](#Changelog-Options)    |
 | open     |  -   | `false`                      | Summary Open by Default [⤵️](#Changelog-Options)    |
+| empty    |  -   | `false`                      | Add Summary on No Changes [⤵️](#Changelog-Options)  |
 | columns  |  -   | `n,i,t,b,a`                  | Customize Table Columns [⤵️](#Changelog-Options)    |
 | sections |  -   | `a,u,d,r,k`                  | Customize Package Sections [⤵️](#Changelog-Options) |
 | max      |  -   | `30`                         | Max Releases to Process                             |
@@ -87,6 +88,8 @@ See the [Changelog Options](#Changelog-Options) to customize the results.
 **toggle:** The `toggle` must be set to a non-empty string if changing this input.
 
 **open:** Set summary to be open by default (note the first example below is open).
+
+**empty:** Set this to `true` to update release notes when no changes are detected.
 
 **columns:** Customize column visibility and order. This must be a perfectly formatted CSV with any combination of these keys:
 

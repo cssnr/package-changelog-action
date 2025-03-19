@@ -104,12 +104,15 @@ const maps = {
         // console.log('data:', data)
         const tableData = genTable(config, data)
         // console.log('tableData:', tableData)
+        if (!tableData.length) {
+            core.info('No Changes Found!')
+        }
         const markdown = genMarkdown(config, tableData)
         // console.log('markdown:', markdown)
         core.endGroup() // Processing Results
 
         // Update Release
-        if (config.update) {
+        if (config.update && (tableData.length || config.empty)) {
             core.startGroup('Current Release Body')
             core.info(current.body)
             core.endGroup() // Current Release Body
@@ -372,7 +375,7 @@ async function addSummary(config, markdown) {
 
 /**
  * Get Config
- * @return {{ path: string, update: boolean, heading: string, toggle: string, open: boolean, columns: array, sections: array, max: number, summary: boolean, token: string }}
+ * @return {{ path: string, update: boolean, heading: string, toggle: string, open: boolean, empty: boolean, columns: array, sections: array, max: number, summary: boolean, token: string }}
  */
 function getConfig() {
     return {
@@ -381,6 +384,7 @@ function getConfig() {
         heading: core.getInput('heading'),
         toggle: core.getInput('toggle', { required: true }),
         open: core.getBooleanInput('open'),
+        empty: core.getBooleanInput('empty'),
         columns: core.getInput('columns', { required: true }).split(','),
         sections: core.getInput('sections', { required: true }).split(','),
         max: parseInt(core.getInput('max', { required: true })),

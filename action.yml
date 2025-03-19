@@ -26,6 +26,10 @@ inputs:
     description: "Summary Open by Default"
     required: false
     default: "false"
+  empty:
+    description: "Add Summary on No Changes"
+    required: false
+    default: "false"
   columns:
     description: "Customize Table Columns"
     required: false

@@ -8,6 +8,24 @@ const semverValid = require('semver/functions/valid')
 const { Base64 } = require('js-base64')
 const { markdownTable } = require('markdown-table')
 
+const maps = {
+    col: {
+        n: { align: 'l', col: 'Package&nbsp;Name' },
+        i: { align: 'c', col: '❔' },
+        t: { align: 'c', col: 'Operation' },
+        b: { align: 'l', col: 'Before' },
+        a: { align: 'l', col: 'After' },
+    },
+    sec: {
+        a: { icon: '🆕', text: 'Added', key: 'added' },
+        u: { icon: '✅', text: 'Upgraded', key: 'upgraded' },
+        d: { icon: '⚠️', text: 'Downgraded', key: 'downgraded' },
+        r: { icon: '⛔', text: 'Removed', key: 'removed' },
+        k: { icon: '❓', text: 'Unknown', key: 'unknown' },
+        n: { icon: '🔘', text: 'Unchanged', key: 'unchanged' },
+    },
+}
+
 ;(async () => {
     try {
         core.info(`🏳️ Starting Package Changelog Action`)
@@ -82,9 +100,9 @@ const { markdownTable } = require('markdown-table')
 
         // Parse Changes
         core.startGroup('Processing Results')
-        const json = diffLocks(prevLock, currentLock)
-        // console.log('json:', json)
-        const tableData = genTable(config, json)
+        const data = diffLocks(prevLock, currentLock)
+        // console.log('data:', data)
+        const tableData = genTable(config, data)
         // console.log('tableData:', tableData)
         const markdown = genMarkdown(config, tableData)
         // console.log('markdown:', markdown)
@@ -112,7 +130,7 @@ const { markdownTable } = require('markdown-table')
 
         // Outputs
         core.info('📩 Setting Outputs')
-        core.setOutput('json', json)
+        core.setOutput('json', JSON.stringify(data))
         core.setOutput('markdown', markdown)
 
         // Summary
@@ -129,16 +147,22 @@ const { markdownTable } = require('markdown-table')
     }
 })()
 
-function genMarkdown(config, data) {
+/**
+ * Generate Markdown
+ * @param {object} config
+ * @param {array} array
+ * @return {string}
+ */
+function genMarkdown(config, array) {
     const [cols, align] = [[], []]
     config.columns.forEach((c) => cols.push(maps.col[c].col))
     config.columns.forEach((c) => align.push(maps.col[c].align))
     console.log('cols, align:', cols, align)
 
-    const table = markdownTable([cols, ...data], { align })
+    const table = markdownTable([cols, ...array], { align })
     console.log('table:', table)
     let result = `${config.heading}\n\n`
-    if (data.length) {
+    if (array.length) {
         const open = config.open ? ' open' : ''
         result +=
             `<details${open}><summary>${config.toggle}</summary>\n\n` +
@@ -151,8 +175,8 @@ function genMarkdown(config, data) {
 
 /**
  * Get Table Array
- * @param config
- * @param data
+ * @param {object} config
+ * @param {{downgraded: *[], unchanged: *[], upgraded: *[], added: *[], removed: *[], unknown: *[]}} data
  * @return {*[]}
  */
 function genTable(config, data) {
@@ -187,6 +211,13 @@ function genTable(config, data) {
     return results
 }
 
+/**
+ * Get Lock File Content
+ * @param {object} config
+ * @param {InstanceType<typeof github.GitHub>} octokit
+ * @param {string} ref
+ * @return {Promise<string>}
+ */
 async function getLock(config, octokit, ref) {
     const lockData = await octokit.rest.repos.getContent({
         ...github.context.repo,
@@ -200,6 +231,12 @@ async function getLock(config, octokit, ref) {
     return Base64.decode(lockData.data.content)
 }
 
+/**
+ * Diff Lock Files
+ * @param {object} previous
+ * @param {object} current
+ * @return {{downgraded: *[], unchanged: *[], upgraded: *[], added: *[], removed: *[], unknown: *[]}}
+ */
 function diffLocks(previous, current) {
     // console.log('previous.packages:', previous.packages)
     // console.log('current.packages:', current.packages)
@@ -350,22 +387,4 @@ function getConfig() {
         summary: core.getBooleanInput('summary'),
         token: core.getInput('token', { required: true }),
     }
-}
-
-const maps = {
-    col: {
-        n: { align: 'l', col: 'Package&nbsp;Name' },
-        i: { align: 'c', col: '❔' },
-        t: { align: 'c', col: 'Operation' },
-        b: { align: 'l', col: 'Before' },
-        a: { align: 'l', col: 'After' },
-    },
-    sec: {
-        a: { icon: '🆕', text: 'Added', key: 'added' },
-        u: { icon: '✅', text: 'Upgraded', key: 'upgraded' },
-        d: { icon: '⚠️', text: 'Downgraded', key: 'downgraded' },
-        r: { icon: '⛔', text: 'Removed', key: 'removed' },
-        k: { icon: '❓', text: 'Unknown', key: 'unknown' },
-        n: { icon: '🔘', text: 'Unchanged', key: 'unchanged' },
-    },
 }

@@ -1,16 +1,16 @@
-[![GitHub Tag Major](https://img.shields.io/github/v/tag/smashedr/package-changelog-action?sort=semver&filter=!v*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/smashedr/package-changelog-action/tags)
-[![GitHub Tag Minor](https://img.shields.io/github/v/tag/smashedr/package-changelog-action?sort=semver&filter=!v*.*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/smashedr/package-changelog-action/tags)
-[![GitHub Release Version](https://img.shields.io/github/v/release/smashedr/package-changelog-action?logo=git&logoColor=white&label=latest)](https://github.com/smashedr/package-changelog-action/releases/latest)
-[![GitHub Dist Size](https://img.shields.io/github/size/smashedr/package-changelog-action/dist%2Findex.js?label=dist%20size)](https://github.com/smashedr/package-changelog-action/blob/master/src/index.js)
-[![Workflow Release](https://img.shields.io/github/actions/workflow/status/smashedr/package-changelog-action/release.yaml?logo=github&label=release)](https://github.com/smashedr/package-changelog-action/actions/workflows/release.yaml)
-[![Workflow Test](https://img.shields.io/github/actions/workflow/status/smashedr/package-changelog-action/test.yaml?logo=github&label=test)](https://github.com/smashedr/package-changelog-action/actions/workflows/test.yaml)
-[![Workflow lint](https://img.shields.io/github/actions/workflow/status/smashedr/package-changelog-action/lint.yaml?logo=github&label=lint)](https://github.com/smashedr/package-changelog-action/actions/workflows/lint.yaml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=smashedr_package-changelog-action&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=smashedr_package-changelog-action)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/smashedr/package-changelog-action?logo=github&label=updated)](https://github.com/smashedr/package-changelog-action/graphs/commit-activity)
+[![GitHub Tag Major](https://img.shields.io/github/v/tag/cssnr/package-changelog-action?sort=semver&filter=!v*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/package-changelog-action/tags)
+[![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/package-changelog-action?sort=semver&filter=!v*.*.*&logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/package-changelog-action/tags)
+[![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/package-changelog-action?logo=git&logoColor=white&label=latest)](https://github.com/cssnr/package-changelog-action/releases/latest)
+[![GitHub Dist Size](https://img.shields.io/github/size/cssnr/package-changelog-action/dist%2Findex.js?label=dist%20size)](https://github.com/cssnr/package-changelog-action/blob/master/src/index.js)
+[![Workflow Release](https://img.shields.io/github/actions/workflow/status/cssnr/package-changelog-action/release.yaml?logo=github&label=release)](https://github.com/cssnr/package-changelog-action/actions/workflows/release.yaml)
+[![Workflow Test](https://img.shields.io/github/actions/workflow/status/cssnr/package-changelog-action/test.yaml?logo=github&label=test)](https://github.com/cssnr/package-changelog-action/actions/workflows/test.yaml)
+[![Workflow lint](https://img.shields.io/github/actions/workflow/status/cssnr/package-changelog-action/lint.yaml?logo=github&label=lint)](https://github.com/cssnr/package-changelog-action/actions/workflows/lint.yaml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_package-changelog-action&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=smashedr_package-changelog-action)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/package-changelog-action?logo=github&label=updated)](https://github.com/cssnr/package-changelog-action/graphs/commit-activity)
 [![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/shaner/package-changelog-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/shaner/package-changelog-action)
-[![GitHub Top Language](https://img.shields.io/github/languages/top/smashedr/package-changelog-action?logo=htmx)](https://github.com/smashedr/package-changelog-action)
-[![GitHub Forks](https://img.shields.io/github/forks/smashedr/package-changelog-action?style=flat&logo=github)](https://github.com/smashedr/package-changelog-action/forks)
-[![GitHub Repo Stars](https://img.shields.io/github/stars/smashedr/package-changelog-action?style=flat&logo=github)](https://github.com/smashedr/package-changelog-action/stargazers)
+[![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/package-changelog-action?logo=htmx)](https://github.com/cssnr/package-changelog-action)
+[![GitHub Forks](https://img.shields.io/github/forks/cssnr/package-changelog-action?style=flat&logo=github)](https://github.com/cssnr/package-changelog-action/forks)
+[![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/package-changelog-action?style=flat&logo=github)](https://github.com/cssnr/package-changelog-action/stargazers)
 [![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&label=org%20stars)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 
@@ -71,7 +71,7 @@ You can add this to your release workflow with no inputs.
 ```yaml
 - name: 'Package Changelog Action'
   continue-on-error: true
-  uses: smashedr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@master
 ```
 
 Note: `continue-on-error: true` is set here so your release workflow won't fail if processing the changelog fails.
@@ -214,7 +214,7 @@ This outputs the changes `json` object and the `markdown` table.
 ```yaml
 - name: 'Package Changelog Action'
   id: changelog
-  uses: smashedr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@master
 
 - name: 'Echo Output'
   env:
@@ -252,7 +252,7 @@ More Output Examples Coming Soon...
 
 ```yaml
 - name: 'Package Changelog Action'
-  uses: smashedr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@master
   with:
     heading: '**NPM Changelog**'
 ```
@@ -262,7 +262,7 @@ More Output Examples Coming Soon...
 
 ```yaml
 - name: 'Package Changelog Action'
-  uses: smashedr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@master
   with:
     columns: 'n,t,b,a'
 ```
@@ -274,7 +274,7 @@ This removes the icon column.
 
 ```yaml
 - name: 'Package Changelog Action'
-  uses: smashedr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@master
   with:
     sections: 'u,a,d,r,k'
 ```
@@ -287,7 +287,7 @@ This changes the section order to put Updated before Added.
 ```yaml
 - name: 'Package Changelog Action'
   id: changelog
-  uses: smashedr/package-changelog-action@master
+  uses: cssnr/package-changelog-action@master
   with:
     update: false
 
@@ -320,7 +320,7 @@ jobs:
 
     steps:
       - name: 'Package Changelog Action'
-        uses: smashedr/package-changelog-action@master
+        uses: cssnr/package-changelog-action@master
         continue-on-error: true
 ```
 
@@ -330,13 +330,13 @@ More Examples Coming Soon...
 
 ## Tags
 
-The following rolling [tags](https://github.com/smashedr/package-changelog-action/tags) are maintained.
+The following rolling [tags](https://github.com/cssnr/package-changelog-action/tags) are maintained.
 
-| Version&nbsp;Tag                                                                                                                                                                                                                       | Rolling | Bugs | Feat. |   Name    |  Target  | Example  |
-| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: | :--: | :---: | :-------: | :------: | :------- |
-| [![GitHub Tag Major](https://img.shields.io/github/v/tag/smashedr/package-changelog-action?sort=semver&filter=!v*.*&style=for-the-badge&label=%20&color=44cc10)](https://github.com/smashedr/package-changelog-action/releases/latest) |   ✅    |  ✅  |  ✅   | **Major** | `vN.x.x` | `vN`     |
-| [![GitHub Tag Minor](https://img.shields.io/github/v/tag/smashedr/package-changelog-action?sort=semver&filter=!v*.*.*&style=for-the-badge&label=%20&color=blue)](https://github.com/smashedr/package-changelog-action/releases/latest) |   ✅    |  ✅  |  ❌   | **Minor** | `vN.N.x` | `vN.N`   |
-| [![GitHub Release](https://img.shields.io/github/v/release/smashedr/package-changelog-action?style=for-the-badge&label=%20&color=red)](https://github.com/smashedr/package-changelog-action/releases/latest)                           |   ❌    |  ❌  |  ❌   | **Micro** | `vN.N.N` | `vN.N.N` |
+| Version&nbsp;Tag                                                                                                                                                                                                                 | Rolling | Bugs | Feat. |   Name    |  Target  | Example  |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: | :--: | :---: | :-------: | :------: | :------- |
+| [![GitHub Tag Major](https://img.shields.io/github/v/tag/cssnr/package-changelog-action?sort=semver&filter=!v*.*&style=for-the-badge&label=%20&color=44cc10)](https://github.com/cssnr/package-changelog-action/releases/latest) |   ✅    |  ✅  |  ✅   | **Major** | `vN.x.x` | `vN`     |
+| [![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/package-changelog-action?sort=semver&filter=!v*.*.*&style=for-the-badge&label=%20&color=blue)](https://github.com/cssnr/package-changelog-action/releases/latest) |   ✅    |  ✅  |  ❌   | **Minor** | `vN.N.x` | `vN.N`   |
+| [![GitHub Release](https://img.shields.io/github/v/release/cssnr/package-changelog-action?style=for-the-badge&label=%20&color=red)](https://github.com/cssnr/package-changelog-action/releases/latest)                           |   ❌    |  ❌  |  ❌   | **Micro** | `vN.N.N` | `vN.N.N` |
 
 You can view the release notes for each version on the [releases](https://github.com/cssnr/cloudflare-purge-cache-action/releases) page.
 
@@ -364,12 +364,12 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 
 For general help or to request a feature, see:
 
-- Q&A Discussion: https://github.com/smashedr/package-changelog-action/discussions/categories/q-a
-- Request a Feature: https://github.com/smashedr/package-changelog-action/discussions/categories/feature-requests
+- Q&A Discussion: https://github.com/cssnr/package-changelog-action/discussions/categories/q-a
+- Request a Feature: https://github.com/cssnr/package-changelog-action/discussions/categories/feature-requests
 
 If you are experiencing an issue/bug or getting unexpected results, you can:
 
-- Report an Issue: https://github.com/smashedr/package-changelog-action/issues
+- Report an Issue: https://github.com/cssnr/package-changelog-action/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
 - Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Update%20Release%20Notes)
 

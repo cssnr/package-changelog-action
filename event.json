@@ -27,8 +27,8 @@
   "repository": {
     "name": "package-changelog-action",
     "description": "Package Changelog Action",
-    "full_name": "smashedr/package-changelog-action",
-    "html_url": "https://github.com/smashedr/package-changelog-action",
+    "full_name": "cssnr/package-changelog-action",
+    "html_url": "https://github.com/cssnr/package-changelog-action",
     "license": {
       "name": "GNU General Public License v3.0",
       "spdx_id": "GPL-3.0"

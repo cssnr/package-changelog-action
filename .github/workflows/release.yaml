@@ -36,9 +36,5 @@ jobs:
           location: tail
 
       - name: "Package Changelog Action"
-        uses: smashedr/package-changelog-action@master
-        continue-on-error: true
-
-      - name: "Combine Release Notes Action"
-        uses: smashedr/combine-release-notes-action@master
+        uses: cssnr/package-changelog-action@master
         continue-on-error: true

@@ -365,7 +365,7 @@ async function addSummary(config, markdown) {
     core.summary.addRaw('</details>\n')
 
     const text = 'View Documentation, Report Issues or Request Features'
-    const link = 'https://github.com/smashedr/package-changelog-action'
+    const link = 'https://github.com/cssnr/package-changelog-action'
     core.summary.addRaw(`\n[${text}](${link}?tab=readme-ov-file#readme)\n\n---`)
     await core.summary.write()
 }

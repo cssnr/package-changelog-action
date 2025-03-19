@@ -1,18 +1,13 @@
-// const fs = require('fs')
-// const path = require('path')
-
 const core = require('@actions/core')
 const github = require('@actions/github')
 
-const { Base64 } = require('js-base64')
-const PackageLockParser =
-    require('snyk-nodejs-lockfile-parser/dist/parsers/package-lock-parser').PackageLockParser
+const PackageLockParser = require('snyk-nodejs-lockfile-parser/dist/parsers/package-lock-parser')
 const semverCompare = require('semver/functions/compare')
 const semverValid = require('semver/functions/valid')
 
-import { markdownTable } from 'markdown-table'
+const { Base64 } = require('js-base64')
+const { markdownTable } = require('markdown-table')
 
-// main
 ;(async () => {
     try {
         core.info(`🏳️ Starting Package Changelog Action`)
@@ -31,7 +26,6 @@ import { markdownTable } from 'markdown-table'
         console.log('github.context.eventName:', github.context.eventName)
         console.log('github.context.ref:', github.context.ref)
         core.endGroup() // Debug
-
         if (github.context.eventName !== 'release') {
             return core.warning(`Skipping event: ${github.context.eventName}`)
         }
@@ -40,28 +34,28 @@ import { markdownTable } from 'markdown-table'
         const config = getConfig()
         core.startGroup('Parsed Config')
         console.log(config)
-        core.endGroup() // Config
-
+        core.endGroup() // Get Config
         if (!config.max || config.max > 100) {
             return core.setFailed('The max must be between 1 and 100.')
         }
 
         // Set Variables
         const octokit = github.getOctokit(config.token)
-        const packageLockParser = new PackageLockParser()
+        const packageLockParser = new PackageLockParser.PackageLockParser()
 
-        // STAGE 1 - Parsing Event and Current/Previous Tags (may have to use hashes)
+        // STAGE 1 - Parsing Event and Current/Previous Tags
 
-        // Process Releases Event
-        console.log('release_id:', github.context.payload.release.id)
+        // Process Releases
+        core.startGroup(`Processing: ${github.context.payload.release.id}`)
         const [current, previous] = await getReleases(config, octokit)
+        core.endGroup() // Processing
 
-        // core.startGroup('Current Releases')
-        // console.log(current)
-        // core.endGroup() // Current Releases
-        // core.startGroup('Previous Releases')
-        // console.log(previous)
-        // core.endGroup() // Previous Releases
+        core.startGroup('Current Releases')
+        console.log(current)
+        core.endGroup() // Current Releases
+        core.startGroup('Previous Releases')
+        console.log(previous)
+        core.endGroup() // Previous Releases
 
         if (!current) {
             return core.setFailed('Current Release Not Found!')
@@ -74,73 +68,38 @@ import { markdownTable } from 'markdown-table'
 
         // STAGE 2 - Processing Lock Files
 
-        // Current
-        const currentLockData = await octokit.rest.repos.getContent({
-            ...github.context.repo,
-            // path: getBasePath(config.path),
-            path: config.path,
-            ref: current.tag_name,
-            // ref: `refs/tags/v1.0.1`,
-        })
-        // console.log('currentLockData:', currentLockData)
-        if (!currentLockData.data?.content) {
-            return core.setFailed('Unable to parse current lock file.')
-        }
-        const currentLockContent = Base64.decode(currentLockData.data.content)
-        // console.log('lockContent:', lockContent)
-        // Current - parseLockFile
-        const currentLock = packageLockParser.parseLockFile(currentLockContent)
+        // currentLock
+        const currentFile = await getLock(config, octokit, current.tag_name)
+        const currentLock = packageLockParser.parseLockFile(currentFile)
         // console.log('currentLock:', currentLock)
 
-        // Previous
-        const prevLockData = await octokit.rest.repos.getContent({
-            ...github.context.repo,
-            // path: getBasePath(config.path),
-            path: config.path,
-            ref: previous.tag_name,
-            // ref: `refs/tags/v1.0.2`,
-        })
-        // console.log('prevLockData:', prevLockData)
-        if (!prevLockData.data?.content) {
-            return core.setFailed('Unable to parse previous lock file.')
-        }
-        const prevLockContent = Base64.decode(prevLockData.data.content)
-        // console.log('prevLockContent:', prevLockContent)
-        // Previous - prevLock
-        const prevLock = packageLockParser.parseLockFile(prevLockContent)
+        // prevLock
+        const prevFile = await getLock(config, octokit, previous.tag_name)
+        const prevLock = packageLockParser.parseLockFile(prevFile)
         // console.log('prevLock:', prevLock)
-
-        // // For use with pull_request events
-        // // Parse lockPath
-        // console.log('config.path:', config.path)
-        // const lockPath = path.resolve(process.cwd(), config.path)
-        // console.log('lockPath:', lockPath)
-        // if (!fs.existsSync(lockPath)) {
-        //     return core.setFailed(`Unable to find lock file: ${config.path}`)
-        // }
 
         // STAGE 3 - Process Results
 
         // Parse Changes
-        const lockChanges = diffLocks(prevLock, currentLock)
-        // console.log('lockChanges:', lockChanges)
-        const tableData = genTable(config, lockChanges)
+        core.startGroup('Processing Results')
+        const json = diffLocks(prevLock, currentLock)
+        // console.log('json:', json)
+        const tableData = genTable(config, json)
         // console.log('tableData:', tableData)
         const markdown = genMarkdown(config, tableData)
-        console.log('markdown:', markdown)
-
-        core.startGroup('Current Release Body')
-        core.info(current.body)
-        core.endGroup() // Current Release Body
-
-        // Make Changes
-        core.startGroup('Updated Release Body')
-        const body = `${current.body}\n\n${markdown}\n`
-        console.log(body)
-        core.endGroup() // Updated Release Body
+        // console.log('markdown:', markdown)
+        core.endGroup() // Processing Results
 
         // Update Release
         if (config.update) {
+            core.startGroup('Current Release Body')
+            core.info(current.body)
+            core.endGroup() // Current Release Body
+            const body = `${current.body}\n\n${markdown}\n`
+            core.startGroup('Updated Release Body')
+            console.log(body)
+            core.endGroup() // Updated Release Body
+
             core.info('⌛ \u001b[33;1mUpdating Release Now...')
             await octokit.rest.repos.updateRelease({
                 ...github.context.repo,
@@ -153,9 +112,8 @@ import { markdownTable } from 'markdown-table'
 
         // Outputs
         core.info('📩 Setting Outputs')
-        core.setOutput('json', lockChanges)
+        core.setOutput('json', json)
         core.setOutput('markdown', markdown)
-        // core.setOutput('notes', notes)
 
         // Summary
         if (config.summary) {
@@ -172,12 +130,10 @@ import { markdownTable } from 'markdown-table'
 })()
 
 function genMarkdown(config, data) {
-    const cols = []
-    const align = []
+    const [cols, align] = [[], []]
     config.columns.forEach((c) => cols.push(maps.col[c].col))
     config.columns.forEach((c) => align.push(maps.col[c].align))
-    console.log('cols:', cols)
-    console.log('align:', align)
+    console.log('cols, align:', cols, align)
 
     const table = markdownTable([cols, ...data], { align })
     console.log('table:', table)
@@ -193,6 +149,12 @@ function genMarkdown(config, data) {
     return result
 }
 
+/**
+ * Get Table Array
+ * @param config
+ * @param data
+ * @return {*[]}
+ */
 function genTable(config, data) {
     const sections = []
     config.sections.forEach((s) => sections.push(maps.sec[s]))
@@ -223,6 +185,19 @@ function genTable(config, data) {
     }
     // console.log('results:', results)
     return results
+}
+
+async function getLock(config, octokit, ref) {
+    const lockData = await octokit.rest.repos.getContent({
+        ...github.context.repo,
+        path: config.path,
+        ref,
+    })
+    if (!lockData.data?.content) {
+        console.log('lockData:', lockData)
+        throw new Error('Unable to parse lock file content.')
+    }
+    return Base64.decode(lockData.data.content)
 }
 
 function diffLocks(previous, current) {
@@ -292,9 +267,9 @@ function addResults(results, type, name, current, previous) {
 }
 
 /**
- * Get Current and Previous Release
- * @param config
- * @param octokit
+ * Get Current/Previous Releases
+ * @param {Object} config
+ * @param {InstanceType<typeof github.GitHub>} octokit
  * @return {Promise<[Object|undefined, Object|undefined]>}
  */
 async function getReleases(config, octokit) {
@@ -358,24 +333,6 @@ async function addSummary(config, markdown) {
     await core.summary.write()
 }
 
-const maps = {
-    col: {
-        n: { align: 'l', col: 'Package&nbsp;Name' },
-        i: { align: 'c', col: '❔' },
-        t: { align: 'c', col: 'Operation' },
-        b: { align: 'l', col: 'Before' },
-        a: { align: 'l', col: 'After' },
-    },
-    sec: {
-        a: { icon: '🆕', text: 'Added', key: 'added' },
-        u: { icon: '✅', text: 'Upgraded', key: 'upgraded' },
-        d: { icon: '⚠️', text: 'Downgraded', key: 'downgraded' },
-        r: { icon: '⛔', text: 'Removed', key: 'removed' },
-        k: { icon: '❓', text: 'Unknown', key: 'unknown' },
-        n: { icon: '🔘', text: 'Unchanged', key: 'unchanged' },
-    },
-}
-
 /**
  * Get Config
  * @return {{ path: string, update: boolean, heading: string, toggle: string, open: boolean, columns: array, sections: array, max: number, summary: boolean, token: string }}
@@ -393,4 +350,22 @@ function getConfig() {
         summary: core.getBooleanInput('summary'),
         token: core.getInput('token', { required: true }),
     }
+}
+
+const maps = {
+    col: {
+        n: { align: 'l', col: 'Package&nbsp;Name' },
+        i: { align: 'c', col: '❔' },
+        t: { align: 'c', col: 'Operation' },
+        b: { align: 'l', col: 'Before' },
+        a: { align: 'l', col: 'After' },
+    },
+    sec: {
+        a: { icon: '🆕', text: 'Added', key: 'added' },
+        u: { icon: '✅', text: 'Upgraded', key: 'upgraded' },
+        d: { icon: '⚠️', text: 'Downgraded', key: 'downgraded' },
+        r: { icon: '⛔', text: 'Removed', key: 'removed' },
+        k: { icon: '❓', text: 'Unknown', key: 'unknown' },
+        n: { icon: '🔘', text: 'Unchanged', key: 'unchanged' },
+    },
 }

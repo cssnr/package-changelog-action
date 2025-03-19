@@ -28,7 +28,7 @@
 - [Support](#Support)
 - [Contributing](#Contributing)
 
-Action to Generate Package Changelog.
+Action to Generate Package Changelog. View some [Changelog Examples](#Changelog-Examples).
 
 On a release, this action will parse the differences in the provided `package-lock.json` file
 between the current and previous release and update the release notes with a table of changes.
@@ -70,8 +70,11 @@ You can add this to your release workflow with no inputs.
 
 ```yaml
 - name: 'Package Changelog Action'
+  continue-on-error: true
   uses: smashedr/package-changelog-action@master
 ```
+
+Note: `continue-on-error: true` is set here so your release workflow won't fail if processing the changelog fails.
 
 See the [Changelog Options](#Changelog-Options) to customize the results.
 
@@ -267,7 +270,7 @@ More Output Examples Coming Soon...
 This removes the icon column.
 
 </details>
-<details><summary>Custom Column Order</summary>
+<details><summary>Custom Section Order</summary>
 
 ```yaml
 - name: 'Package Changelog Action'

@@ -40326,10 +40326,9 @@ exports.LockParserBase = LockParserBase;
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
-var __webpack_unused_export__;
 
-__webpack_unused_export__ = ({ value: true });
-exports.n = void 0;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PackageLockParser = void 0;
 const index_1 = __nccwpck_require__(7885);
 const errors_1 = __nccwpck_require__(3504);
 const lock_parser_base_1 = __nccwpck_require__(3044);
@@ -40392,7 +40391,7 @@ class PackageLockParser extends lock_parser_base_1.LockParserBase {
         return dep.name;
     }
 }
-exports.n = PackageLockParser;
+exports.PackageLockParser = PackageLockParser;
 //# sourceMappingURL=package-lock-parser.js.map
 
 /***/ }),
@@ -65579,64 +65578,16 @@ function parseParams (str) {
 module.exports = parseParams
 
 
-/***/ })
+/***/ }),
 
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __nccwpck_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			id: moduleId,
-/******/ 			loaded: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		var threw = true;
-/******/ 		try {
-/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __nccwpck_require__);
-/******/ 			threw = false;
-/******/ 		} finally {
-/******/ 			if(threw) delete __webpack_module_cache__[moduleId];
-/******/ 		}
-/******/ 	
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/node module decorator */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.nmd = (module) => {
-/******/ 			module.paths = [];
-/******/ 			if (!module.children) module.children = [];
-/******/ 			return module;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/compat */
-/******/ 	
-/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
+/***/ 3116:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
+
 "use strict";
-
-;// CONCATENATED MODULE: ./node_modules/markdown-table/index.js
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   markdownTable: () => (/* binding */ markdownTable)
+/* harmony export */ });
 // To do: next major: remove.
 /**
  * @typedef {Options} MarkdownTableOptions
@@ -66031,18 +65982,97 @@ function toAlignment(value) {
         : 0
 }
 
-;// CONCATENATED MODULE: ./src/index.js
-// const fs = require('fs')
-// const path = require('path')
 
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __nccwpck_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			id: moduleId,
+/******/ 			loaded: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		var threw = true;
+/******/ 		try {
+/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __nccwpck_require__);
+/******/ 			threw = false;
+/******/ 		} finally {
+/******/ 			if(threw) delete __webpack_module_cache__[moduleId];
+/******/ 		}
+/******/ 	
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/node module decorator */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.nmd = (module) => {
+/******/ 			module.paths = [];
+/******/ 			if (!module.children) module.children = [];
+/******/ 			return module;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/compat */
+/******/ 	
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
 const core = __nccwpck_require__(7484)
 const github = __nccwpck_require__(3228)
 
-const { Base64 } = __nccwpck_require__(5810)
-const PackageLockParser =
-    (__nccwpck_require__(1665)/* .PackageLockParser */ .n)
+const PackageLockParser = __nccwpck_require__(1665)
 const semverCompare = __nccwpck_require__(8469)
 const semverValid = __nccwpck_require__(8780)
+
+const { Base64 } = __nccwpck_require__(5810)
+const { markdownTable } = __nccwpck_require__(3116)
 
 ;(async () => {
     try {
@@ -66062,7 +66092,6 @@ const semverValid = __nccwpck_require__(8780)
         console.log('github.context.eventName:', github.context.eventName)
         console.log('github.context.ref:', github.context.ref)
         core.endGroup() // Debug
-
         if (github.context.eventName !== 'release') {
             return core.warning(`Skipping event: ${github.context.eventName}`)
         }
@@ -66071,28 +66100,28 @@ const semverValid = __nccwpck_require__(8780)
         const config = getConfig()
         core.startGroup('Parsed Config')
         console.log(config)
-        core.endGroup() // Config
-
+        core.endGroup() // Get Config
         if (!config.max || config.max > 100) {
             return core.setFailed('The max must be between 1 and 100.')
         }
 
         // Set Variables
         const octokit = github.getOctokit(config.token)
-        const packageLockParser = new PackageLockParser()
+        const packageLockParser = new PackageLockParser.PackageLockParser()
 
-        // STAGE 1 - Parsing Event and Current/Previous Tags (may have to use hashes)
+        // STAGE 1 - Parsing Event and Current/Previous Tags
 
-        // Process Releases Event
-        console.log('release_id:', github.context.payload.release.id)
+        // Process Releases
+        core.startGroup(`Processing: ${github.context.payload.release.id}`)
         const [current, previous] = await getReleases(config, octokit)
+        core.endGroup() // Processing
 
-        // core.startGroup('Current Releases')
-        // console.log(current)
-        // core.endGroup() // Current Releases
-        // core.startGroup('Previous Releases')
-        // console.log(previous)
-        // core.endGroup() // Previous Releases
+        core.startGroup('Current Releases')
+        console.log(current)
+        core.endGroup() // Current Releases
+        core.startGroup('Previous Releases')
+        console.log(previous)
+        core.endGroup() // Previous Releases
 
         if (!current) {
             return core.setFailed('Current Release Not Found!')
@@ -66105,73 +66134,38 @@ const semverValid = __nccwpck_require__(8780)
 
         // STAGE 2 - Processing Lock Files
 
-        // Current
-        const currentLockData = await octokit.rest.repos.getContent({
-            ...github.context.repo,
-            // path: getBasePath(config.path),
-            path: config.path,
-            ref: current.tag_name,
-            // ref: `refs/tags/v1.0.1`,
-        })
-        // console.log('currentLockData:', currentLockData)
-        if (!currentLockData.data?.content) {
-            return core.setFailed('Unable to parse current lock file.')
-        }
-        const currentLockContent = Base64.decode(currentLockData.data.content)
-        // console.log('lockContent:', lockContent)
-        // Current - parseLockFile
-        const currentLock = packageLockParser.parseLockFile(currentLockContent)
+        // currentLock
+        const currentFile = await getLock(config, octokit, current.tag_name)
+        const currentLock = packageLockParser.parseLockFile(currentFile)
         // console.log('currentLock:', currentLock)
 
-        // Previous
-        const prevLockData = await octokit.rest.repos.getContent({
-            ...github.context.repo,
-            // path: getBasePath(config.path),
-            path: config.path,
-            ref: previous.tag_name,
-            // ref: `refs/tags/v1.0.2`,
-        })
-        // console.log('prevLockData:', prevLockData)
-        if (!prevLockData.data?.content) {
-            return core.setFailed('Unable to parse previous lock file.')
-        }
-        const prevLockContent = Base64.decode(prevLockData.data.content)
-        // console.log('prevLockContent:', prevLockContent)
-        // Previous - prevLock
-        const prevLock = packageLockParser.parseLockFile(prevLockContent)
+        // prevLock
+        const prevFile = await getLock(config, octokit, previous.tag_name)
+        const prevLock = packageLockParser.parseLockFile(prevFile)
         // console.log('prevLock:', prevLock)
-
-        // // For use with pull_request events
-        // // Parse lockPath
-        // console.log('config.path:', config.path)
-        // const lockPath = path.resolve(process.cwd(), config.path)
-        // console.log('lockPath:', lockPath)
-        // if (!fs.existsSync(lockPath)) {
-        //     return core.setFailed(`Unable to find lock file: ${config.path}`)
-        // }
 
         // STAGE 3 - Process Results
 
         // Parse Changes
-        const lockChanges = diffLocks(prevLock, currentLock)
-        // console.log('lockChanges:', lockChanges)
-        const tableData = genTable(config, lockChanges)
+        core.startGroup('Processing Results')
+        const json = diffLocks(prevLock, currentLock)
+        // console.log('json:', json)
+        const tableData = genTable(config, json)
         // console.log('tableData:', tableData)
         const markdown = genMarkdown(config, tableData)
-        console.log('markdown:', markdown)
-
-        core.startGroup('Current Release Body')
-        core.info(current.body)
-        core.endGroup() // Current Release Body
-
-        // Make Changes
-        core.startGroup('Updated Release Body')
-        const body = `${current.body}\n\n${markdown}\n`
-        console.log(body)
-        core.endGroup() // Updated Release Body
+        // console.log('markdown:', markdown)
+        core.endGroup() // Processing Results
 
         // Update Release
         if (config.update) {
+            core.startGroup('Current Release Body')
+            core.info(current.body)
+            core.endGroup() // Current Release Body
+            const body = `${current.body}\n\n${markdown}\n`
+            core.startGroup('Updated Release Body')
+            console.log(body)
+            core.endGroup() // Updated Release Body
+
             core.info('⌛ \u001b[33;1mUpdating Release Now...')
             await octokit.rest.repos.updateRelease({
                 ...github.context.repo,
@@ -66184,9 +66178,8 @@ const semverValid = __nccwpck_require__(8780)
 
         // Outputs
         core.info('📩 Setting Outputs')
-        core.setOutput('json', lockChanges)
+        core.setOutput('json', json)
         core.setOutput('markdown', markdown)
-        // core.setOutput('notes', notes)
 
         // Summary
         if (config.summary) {
@@ -66203,12 +66196,10 @@ const semverValid = __nccwpck_require__(8780)
 })()
 
 function genMarkdown(config, data) {
-    const cols = []
-    const align = []
+    const [cols, align] = [[], []]
     config.columns.forEach((c) => cols.push(maps.col[c].col))
     config.columns.forEach((c) => align.push(maps.col[c].align))
-    console.log('cols:', cols)
-    console.log('align:', align)
+    console.log('cols, align:', cols, align)
 
     const table = markdownTable([cols, ...data], { align })
     console.log('table:', table)
@@ -66224,6 +66215,12 @@ function genMarkdown(config, data) {
     return result
 }
 
+/**
+ * Get Table Array
+ * @param config
+ * @param data
+ * @return {*[]}
+ */
 function genTable(config, data) {
     const sections = []
     config.sections.forEach((s) => sections.push(maps.sec[s]))
@@ -66254,6 +66251,19 @@ function genTable(config, data) {
     }
     // console.log('results:', results)
     return results
+}
+
+async function getLock(config, octokit, ref) {
+    const lockData = await octokit.rest.repos.getContent({
+        ...github.context.repo,
+        path: config.path,
+        ref,
+    })
+    if (!lockData.data?.content) {
+        console.log('lockData:', lockData)
+        throw new Error('Unable to parse lock file content.')
+    }
+    return Base64.decode(lockData.data.content)
 }
 
 function diffLocks(previous, current) {
@@ -66323,9 +66333,9 @@ function addResults(results, type, name, current, previous) {
 }
 
 /**
- * Get Current and Previous Release
- * @param config
- * @param octokit
+ * Get Current/Previous Releases
+ * @param {Object} config
+ * @param {InstanceType<typeof github.GitHub>} octokit
  * @return {Promise<[Object|undefined, Object|undefined]>}
  */
 async function getReleases(config, octokit) {
@@ -66389,24 +66399,6 @@ async function addSummary(config, markdown) {
     await core.summary.write()
 }
 
-const maps = {
-    col: {
-        n: { align: 'l', col: 'Package&nbsp;Name' },
-        i: { align: 'c', col: '❔' },
-        t: { align: 'c', col: 'Operation' },
-        b: { align: 'l', col: 'Before' },
-        a: { align: 'l', col: 'After' },
-    },
-    sec: {
-        a: { icon: '🆕', text: 'Added', key: 'added' },
-        u: { icon: '✅', text: 'Upgraded', key: 'upgraded' },
-        d: { icon: '⚠️', text: 'Downgraded', key: 'downgraded' },
-        r: { icon: '⛔', text: 'Removed', key: 'removed' },
-        k: { icon: '❓', text: 'Unknown', key: 'unknown' },
-        n: { icon: '🔘', text: 'Unchanged', key: 'unchanged' },
-    },
-}
-
 /**
  * Get Config
  * @return {{ path: string, update: boolean, heading: string, toggle: string, open: boolean, columns: array, sections: array, max: number, summary: boolean, token: string }}
@@ -66426,7 +66418,23 @@ function getConfig() {
     }
 }
 
-})();
+const maps = {
+    col: {
+        n: { align: 'l', col: 'Package&nbsp;Name' },
+        i: { align: 'c', col: '❔' },
+        t: { align: 'c', col: 'Operation' },
+        b: { align: 'l', col: 'Before' },
+        a: { align: 'l', col: 'After' },
+    },
+    sec: {
+        a: { icon: '🆕', text: 'Added', key: 'added' },
+        u: { icon: '✅', text: 'Upgraded', key: 'upgraded' },
+        d: { icon: '⚠️', text: 'Downgraded', key: 'downgraded' },
+        r: { icon: '⛔', text: 'Removed', key: 'removed' },
+        k: { icon: '❓', text: 'Unknown', key: 'unknown' },
+        n: { icon: '🔘', text: 'Unchanged', key: 'unchanged' },
+    },
+}
 
 module.exports = __webpack_exports__;
 /******/ })()

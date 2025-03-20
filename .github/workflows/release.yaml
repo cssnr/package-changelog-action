@@ -13,11 +13,6 @@ jobs:
       contents: write
 
     steps:
-      - name: "Debug event.json"
-        continue-on-error: true
-        run: |
-          cat "${GITHUB_EVENT_PATH}"
-
       - name: "Update Tags"
         id: tags
         uses: cssnr/update-version-tags-action@v1
@@ -29,12 +24,18 @@ jobs:
           echo "steps.tags.outputs.tags: ${{ steps.tags.outputs.tags }}"
 
       - name: "Update Release Notes Action"
-        uses: smashedr/update-release-notes-action@master
         continue-on-error: true
+        uses: smashedr/update-release-notes-action@master
         with:
           tags: ${{ steps.tags.outputs.tags }}
           location: tail
 
       - name: "Package Changelog Action"
-        uses: cssnr/package-changelog-action@master
         continue-on-error: true
+        uses: cssnr/package-changelog-action@master
+
+      - name: "Send Failure Notification"
+        if: ${{ failure() }}
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}

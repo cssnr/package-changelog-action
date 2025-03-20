@@ -66170,12 +66170,13 @@ const maps = {
         // console.log('data:', data)
         const tableData = genTable(config, data)
         // console.log('tableData:', tableData)
-        if (!tableData.length) {
-            core.info('No Changes Found!')
-        }
         const markdown = genMarkdown(config, tableData)
         // console.log('markdown:', markdown)
         core.endGroup() // Processing Results
+
+        if (!tableData.length) {
+            core.info('No Changes Found!')
+        }
 
         // Update Release
         if (config.update && (tableData.length || config.empty)) {
@@ -66218,9 +66219,9 @@ const maps = {
 
 /**
  * Generate Markdown
- * @param {object} config
- * @param {array} array
- * @return {string}
+ * @param {Config} config
+ * @param {String[]} array
+ * @return {String}
  */
 function genMarkdown(config, array) {
     const [cols, align] = [[], []]
@@ -66244,7 +66245,7 @@ function genMarkdown(config, array) {
 
 /**
  * Get Table Array
- * @param {object} config
+ * @param {Config} config
  * @param {{downgraded: *[], unchanged: *[], upgraded: *[], added: *[], removed: *[], unknown: *[]}} data
  * @return {*[]}
  */
@@ -66282,10 +66283,10 @@ function genTable(config, data) {
 
 /**
  * Get Lock File Content
- * @param {object} config
+ * @param {Config} config
  * @param {InstanceType<typeof github.GitHub>} octokit
- * @param {string} ref
- * @return {Promise<string>}
+ * @param {String} ref
+ * @return {Promise<String>}
  */
 async function getLock(config, octokit, ref) {
     const lockData = await octokit.rest.repos.getContent({
@@ -66302,8 +66303,8 @@ async function getLock(config, octokit, ref) {
 
 /**
  * Diff Lock Files
- * @param {object} previous
- * @param {object} current
+ * @param {Object} previous
+ * @param {Object} current
  * @return {{downgraded: *[], unchanged: *[], upgraded: *[], added: *[], removed: *[], unknown: *[]}}
  */
 function diffLocks(previous, current) {
@@ -66374,7 +66375,7 @@ function addResults(results, type, name, current, previous) {
 
 /**
  * Get Current/Previous Releases
- * @param {Object} config
+ * @param {Config} config
  * @param {InstanceType<typeof github.GitHub>} octokit
  * @return {Promise<[Object|undefined, Object|undefined]>}
  */
@@ -66414,7 +66415,7 @@ async function getReleases(config, octokit) {
 
 /**
  * Add Summary
- * @param {Object} config
+ * @param {Config} config
  * @param {String} markdown
  * @return {Promise<void>}
  */
@@ -66441,7 +66442,19 @@ async function addSummary(config, markdown) {
 
 /**
  * Get Config
- * @return {{ path: string, update: boolean, heading: string, toggle: string, open: boolean, empty: boolean, columns: array, sections: array, max: number, summary: boolean, token: string }}
+ * @typedef {Object} Config
+ * @property {String} path
+ * @property {Boolean} update
+ * @property {String} heading
+ * @property {String} toggle
+ * @property {Boolean} open
+ * @property {Boolean} empty
+ * @property {Array} columns
+ * @property {Array} sections
+ * @property {Number} max
+ * @property {Boolean} summary
+ * @property {String} token
+ * @return {Config}
  */
 function getConfig() {
     return {

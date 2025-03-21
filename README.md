@@ -368,6 +368,11 @@ Breaking changes would result in a **Major** version bump. At a minimum you shou
 - Custom Section Icons
 - Custom Section Text
 
+Want to show outdated packages on a pull request? Check out: [cssnr/npm-outdated-action](https://github.com/cssnr/npm-outdated-action?tab=readme-ov-file#readme)  
+Want to automatically updated tags on release? Check out: [cssnr/update-version-tags-action](https://github.com/cssnr/update-version-tags-action?tab=readme-ov-file#readme)
+
+If you would like to see a new feature, please [submit a feature request](https://github.com/cssnr/package-changelog-action/discussions/categories/feature-requests).
+
 # Support
 
 For general help or to request a feature, see:

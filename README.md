@@ -17,9 +17,9 @@
 # Package Changelog Action
 
 - [Inputs](#Inputs)
+  - [Permissions](#Permissions)
   - [Changelog Options](#Changelog-Options)
   - [Changelog Examples](#Changelog-Examples)
-  - [Permissions](#Permissions)
 - [Outputs](#Outputs)
 - [Examples](#Examples)
 - [Tags](#Tags)
@@ -79,6 +79,17 @@ Note: `continue-on-error: true` is set here so your release workflow won't fail 
 
 See the [Changelog Options](#Changelog-Options) to customize the results.
 
+### Permissions
+
+This action requires the following permissions to update release notes:
+
+```yaml
+permissions:
+  contents: write
+```
+
+Permissions documentation for [Workflows](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token) and [Actions](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication).
+
 ### Changelog Options
 
 **update:** Set this to `false` if you only want to use the [Outputs](#Outputs).
@@ -91,7 +102,8 @@ See the [Changelog Options](#Changelog-Options) to customize the results.
 
 **empty:** Set this to `true` to update release notes when no changes are detected.
 
-**columns:** Customize column visibility and order. This must be a perfectly formatted CSV with any combination of these keys:
+**columns:** Customize column visibility and order.
+This must be a perfectly formatted CSV with any combination of these keys:
 
 Default value: `n,i,t,b,a`
 
@@ -103,7 +115,8 @@ Default value: `n,i,t,b,a`
 | `b` | Before       | Version before change   |
 | `a` | After        | Version after change    |
 
-**sections:** Customize section visibility and order. This must be a perfectly formatted CSV with any combination of these keys:
+**sections:** Customize section visibility and order.
+This must be a perfectly formatted CSV with any combination of these keys:
 
 Default value: `a,u,d,r,k`
 
@@ -195,15 +208,6 @@ No changes detected in: [package-lock.json](package-lock.json)
 More Changelog Examples Coming Soon...
 
 For more options, see the [Changelog Options](#Changelog-Options).
-
-### Permissions
-
-This action requires the following permissions to update release notes:
-
-```yaml
-permissions:
-  contents: write
-```
 
 ## Outputs
 
@@ -341,7 +345,7 @@ The following rolling [tags](https://github.com/cssnr/package-changelog-action/t
 | [![GitHub Tag Minor](https://img.shields.io/github/v/tag/cssnr/package-changelog-action?sort=semver&filter=!v*.*.*&style=for-the-badge&label=%20&color=blue)](https://github.com/cssnr/package-changelog-action/releases/latest) |   ✅    |  ✅  |  ❌   | **Minor** | `vN.N.x` | `vN.N`   |
 | [![GitHub Release](https://img.shields.io/github/v/release/cssnr/package-changelog-action?style=for-the-badge&label=%20&color=red)](https://github.com/cssnr/package-changelog-action/releases/latest)                           |   ❌    |  ❌  |  ❌   | **Micro** | `vN.N.N` | `vN.N.N` |
 
-You can view the release notes for each version on the [releases](https://github.com/cssnr/cloudflare-purge-cache-action/releases) page.
+You can view the release notes for each version on the [releases](https://github.com/cssnr/package-changelog-action/releases) page.
 
 The **Major** tag is recommended. It is the most up-to-date and always backwards compatible.
 Breaking changes would result in a **Major** version bump. At a minimum you should use a **Minor** tag.
@@ -377,9 +381,13 @@ If you are experiencing an issue/bug or getting unexpected results, you can:
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
 - Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Update%20Release%20Notes)
 
+For more information, see the CSSNR [SUPPORT.md](https://github.com/cssnr/.github/blob/master/.github/SUPPORT.md#support).
+
 # Contributing
 
 Currently, the best way to contribute to this project is to star this project on GitHub.
+
+For more information, see the CSSNR [CONTRIBUTING.md](https://github.com/cssnr/.github/blob/master/.github/CONTRIBUTING.md#contributing).
 
 Additionally, you can support other GitHub Actions I have published:
 
@@ -393,5 +401,7 @@ Additionally, you can support other GitHub Actions I have published:
 - [Cloudflare Purge Cache Action](https://github.com/cssnr/cloudflare-purge-cache-action?tab=readme-ov-file#readme)
 - [Mozilla Addon Update Action](https://github.com/cssnr/mozilla-addon-update-action?tab=readme-ov-file#readme)
 - [Docker Tags Action](https://github.com/cssnr/docker-tags-action?tab=readme-ov-file#readme)
+- [Package Changelog Action](https://github.com/cssnr/package-changelog-action?tab=readme-ov-file#readme)
+- [NPM Outdated Check Action](https://github.com/cssnr/npm-outdated-action?tab=readme-ov-file#readme)
 
 For a full list of current projects to support visit: [https://cssnr.github.io/](https://cssnr.github.io/)

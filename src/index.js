@@ -48,24 +48,24 @@ const maps = {
             return core.warning(`Skipping event: ${github.context.eventName}`)
         }
 
-        // Get Config
-        const config = getConfig()
-        core.startGroup('Parsed Config')
-        console.log(config)
-        core.endGroup() // Get Config
-        if (!config.max || config.max > 100) {
+        // Get Inputs
+        const inputs = getInputs()
+        core.startGroup('Parsed Inputs')
+        console.log(inputs)
+        core.endGroup() // Get Inputs
+        if (!inputs.max || inputs.max > 100) {
             return core.setFailed('The max must be between 1 and 100.')
         }
 
         // Set Variables
-        const octokit = github.getOctokit(config.token)
+        const octokit = github.getOctokit(inputs.token)
         const packageLockParser = new PackageLockParser.PackageLockParser()
 
         // STAGE 1 - Parsing Event and Current/Previous Tags
 
         // Process Releases
         core.startGroup(`Processing: ${github.context.payload.release.id}`)
-        const [current, previous] = await getReleases(config, octokit)
+        const [current, previous] = await getReleases(inputs, octokit)
         core.endGroup() // Processing
 
         core.startGroup('Current Releases')
@@ -87,12 +87,12 @@ const maps = {
         // STAGE 2 - Processing Lock Files
 
         // currentLock
-        const currentFile = await getLock(config, octokit, current.tag_name)
+        const currentFile = await getLock(inputs, octokit, current.tag_name)
         const currentLock = packageLockParser.parseLockFile(currentFile)
         // console.log('currentLock:', currentLock)
 
         // prevLock
-        const prevFile = await getLock(config, octokit, previous.tag_name)
+        const prevFile = await getLock(inputs, octokit, previous.tag_name)
         const prevLock = packageLockParser.parseLockFile(prevFile)
         // console.log('prevLock:', prevLock)
 
@@ -102,9 +102,9 @@ const maps = {
         core.startGroup('Processing Results')
         const data = diffLocks(prevLock, currentLock)
         // console.log('data:', data)
-        const tableData = genTable(config, data)
+        const tableData = genTable(inputs, data)
         // console.log('tableData:', tableData)
-        const markdown = genMarkdown(config, tableData)
+        const markdown = genMarkdown(inputs, tableData)
         // console.log('markdown:', markdown)
         core.endGroup() // Processing Results
 
@@ -113,7 +113,7 @@ const maps = {
         }
 
         // Update Release
-        if (config.update && (tableData.length || config.empty)) {
+        if (inputs.update && (tableData.length || inputs.empty)) {
             core.startGroup('Current Release Body')
             core.info(current.body)
             core.endGroup() // Current Release Body
@@ -138,9 +138,14 @@ const maps = {
         core.setOutput('markdown', markdown)
 
         // Summary
-        if (config.summary) {
+        if (inputs.summary) {
             core.info('📝 Writing Job Summary')
-            await addSummary(config, markdown)
+            try {
+                await addSummary(inputs, markdown)
+            } catch (e) {
+                console.log(e)
+                core.error(`Error writing Job Summary ${e.message}`)
+            }
         }
 
         core.info(`✅ \u001b[32;1mFinished Success`)
@@ -153,39 +158,39 @@ const maps = {
 
 /**
  * Generate Markdown
- * @param {Config} config
+ * @param {Inputs} inputs
  * @param {String[]} array
  * @return {String}
  */
-function genMarkdown(config, array) {
+function genMarkdown(inputs, array) {
     const [cols, align] = [[], []]
-    config.columns.forEach((c) => cols.push(maps.col[c].col))
-    config.columns.forEach((c) => align.push(maps.col[c].align))
+    inputs.columns.forEach((c) => cols.push(maps.col[c].col))
+    inputs.columns.forEach((c) => align.push(maps.col[c].align))
     console.log('cols, align:', cols, align)
 
     const table = markdownTable([cols, ...array], { align })
     console.log('table:', table)
-    let result = `${config.heading}\n\n`
+    let result = `${inputs.heading}\n\n`
     if (array.length) {
-        const open = config.open ? ' open' : ''
+        const open = inputs.open ? ' open' : ''
         result +=
-            `<details${open}><summary>${config.toggle}</summary>\n\n` +
-            `Changes for: [${config.path}](${config.path})\n\n${table}\n\n</details>\n`
+            `<details${open}><summary>${inputs.toggle}</summary>\n\n` +
+            `Changes for: [${inputs.path}](${inputs.path})\n\n${table}\n\n</details>\n`
     } else {
-        result += `No changes detected in: [${config.path}](${config.path})`
+        result += `No changes detected in: [${inputs.path}](${inputs.path})`
     }
     return result
 }
 
 /**
  * Get Table Array
- * @param {Config} config
+ * @param {Inputs} inputs
  * @param {{downgraded: *[], unchanged: *[], upgraded: *[], added: *[], removed: *[], unknown: *[]}} data
  * @return {*[]}
  */
-function genTable(config, data) {
+function genTable(inputs, data) {
     const sections = []
-    config.sections.forEach((s) => sections.push(maps.sec[s]))
+    inputs.sections.forEach((s) => sections.push(maps.sec[s]))
     console.log('sections:', sections)
     const results = []
     for (const section of sections) {
@@ -206,7 +211,7 @@ function genTable(config, data) {
             }
             // console.log('pkg:', pkg)
             const result = []
-            config.columns.forEach((k) => result.push(pkg[k]))
+            inputs.columns.forEach((k) => result.push(pkg[k]))
             // console.log('result:', result)
             results.push(result)
         }
@@ -217,15 +222,15 @@ function genTable(config, data) {
 
 /**
  * Get Lock File Content
- * @param {Config} config
+ * @param {Inputs} inputs
  * @param {InstanceType<typeof github.GitHub>} octokit
  * @param {String} ref
  * @return {Promise<String>}
  */
-async function getLock(config, octokit, ref) {
+async function getLock(inputs, octokit, ref) {
     const lockData = await octokit.rest.repos.getContent({
         ...github.context.repo,
-        path: config.path,
+        path: inputs.path,
         ref,
     })
     if (!lockData.data?.content) {
@@ -266,10 +271,7 @@ function diffLocks(previous, current) {
         const previousData = previous.packages[name]
         // console.log('previousData:', previousData)
         if (previousData) {
-            if (
-                !semverValid(data.version) ||
-                !semverValid(previousData.version)
-            ) {
+            if (!semverValid(data.version) || !semverValid(previousData.version)) {
                 addResults(results, 4, name, data)
             }
             const cmp = semverCompare(data.version, previousData.version)
@@ -309,14 +311,14 @@ function addResults(results, type, name, current, previous) {
 
 /**
  * Get Current/Previous Releases
- * @param {Config} config
+ * @param {Inputs} inputs
  * @param {InstanceType<typeof github.GitHub>} octokit
  * @return {Promise<[Object|undefined, Object|undefined]>}
  */
-async function getReleases(config, octokit) {
+async function getReleases(inputs, octokit) {
     const releases = await octokit.rest.repos.listReleases({
         ...github.context.repo,
-        per_page: config.max,
+        per_page: inputs.max,
     })
     // core.startGroup('Releases')
     // console.log(releases.data)
@@ -349,22 +351,22 @@ async function getReleases(config, octokit) {
 
 /**
  * Add Summary
- * @param {Config} config
+ * @param {Inputs} inputs
  * @param {String} markdown
  * @return {Promise<void>}
  */
-async function addSummary(config, markdown) {
+async function addSummary(inputs, markdown) {
     core.summary.addRaw('## Package Changelog Action\n\n')
     // core.summary.addRaw('<details><summary>Changelog</summary>')
     // core.summary.addRaw(`\n\n${markdown}\n\n`)
     // core.summary.addRaw('</details>\n')
     core.summary.addRaw(`---\n\n${markdown}\n\n---\n\n`)
 
-    delete config.token
-    const yaml = Object.entries(config)
+    delete inputs.token
+    const yaml = Object.entries(inputs)
         .map(([k, v]) => `${k}: ${JSON.stringify(v)}`)
         .join('\n')
-    core.summary.addRaw('<details><summary>Config</summary>')
+    core.summary.addRaw('<details><summary>Inputs</summary>')
     core.summary.addCodeBlock(yaml, 'yaml')
     core.summary.addRaw('</details>\n')
 
@@ -375,8 +377,8 @@ async function addSummary(config, markdown) {
 }
 
 /**
- * Get Config
- * @typedef {Object} Config
+ * Get Inputs
+ * @typedef {Object} Inputs
  * @property {String} path
  * @property {Boolean} update
  * @property {String} heading
@@ -388,9 +390,9 @@ async function addSummary(config, markdown) {
  * @property {Number} max
  * @property {Boolean} summary
  * @property {String} token
- * @return {Config}
+ * @return {Inputs}
  */
-function getConfig() {
+function getInputs() {
     return {
         path: core.getInput('path', { required: true }),
         update: core.getBooleanInput('update'),

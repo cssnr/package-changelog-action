@@ -32,7 +32,7 @@ jobs:
 
       - name: "Package Changelog Action"
         continue-on-error: true
-        uses: cssnr/package-changelog-action@master
+        uses: cssnr/package-changelog-action@v1
 
       - name: "Send Failure Notification"
         if: ${{ failure() }}

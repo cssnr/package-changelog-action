@@ -4,10 +4,10 @@ export default [
     js.configs.recommended,
     {
         languageOptions: {
-            parserOptions: {
-                ecmaVersion: 'latest',
-                sourceType: 'module',
-            },
+            ecmaVersion: 'latest',
+            sourceType: 'module',
+        },
+        settings: {
             env: {
                 node: true,
                 es2021: true,

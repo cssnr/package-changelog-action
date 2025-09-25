@@ -3,7 +3,6 @@
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/package-changelog-action?logo=git&logoColor=white&labelColor=585858&label=%20)](https://github.com/cssnr/package-changelog-action/releases/latest)
 [![GitHub Dist Size](https://img.shields.io/github/size/cssnr/package-changelog-action/dist%2Findex.js?logo=bookstack&logoColor=white&label=dist%20size)](https://github.com/cssnr/package-changelog-action/blob/master/src/index.js)
 [![Workflow Release](https://img.shields.io/github/actions/workflow/status/cssnr/package-changelog-action/release.yaml?logo=cachet&label=release)](https://github.com/cssnr/package-changelog-action/actions/workflows/release.yaml)
-[![Workflow Test](https://img.shields.io/github/actions/workflow/status/cssnr/package-changelog-action/test.yaml?logo=cachet&label=test)](https://github.com/cssnr/package-changelog-action/actions/workflows/test.yaml)
 [![Workflow Lint](https://img.shields.io/github/actions/workflow/status/cssnr/package-changelog-action/lint.yaml?logo=cachet&label=lint)](https://github.com/cssnr/package-changelog-action/actions/workflows/lint.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_package-changelog-action&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cssnr_package-changelog-action)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/package-changelog-action?logo=github&label=updated)](https://github.com/cssnr/package-changelog-action/pulse)

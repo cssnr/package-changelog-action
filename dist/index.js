@@ -72009,7 +72009,7 @@ function requireSrc () {
 	    let previous;
 	    let current;
 	    for (const release of releases.data) {
-	        console.debug('--- Processing:', release.tag_name);
+	        console.debug(`--- Processing ${release.id}:`, release.tag_name);
 	        if (current) {
 	            if (current.prerelease) {
 	                console.log('Previous Release:', release.tag_name);

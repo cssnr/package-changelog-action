@@ -421,7 +421,7 @@ Additionally, you can support other GitHub Actions I have published:
 - [Check Build Action](https://github.com/cssnr/check-build-action?tab=readme-ov-file#readme)
 - [Web Request Action](https://github.com/cssnr/web-request-action?tab=readme-ov-file#readme)
 
-<details><summary>Unpublished Actions ❔</summary>
+<details><summary>❔ Unpublished Actions</summary>
 
 These actions' are not published on the Marketplace, but may be useful.
 
@@ -440,7 +440,7 @@ Specific Actions:
 
 </details>
 
-<details><summary>Action Templates 📝</summary>
+<details><summary>📝 Action Templates</summary>
 
 These are basic actions' templates that I use for creating new actions.
 
@@ -449,7 +449,7 @@ These are basic actions' templates that I use for creating new actions.
 - [ts-test-action](https://github.com/smashedr/ts-test-action?tab=readme-ov-file#readme) - TypeScript
 - [docker-test-action](https://github.com/smashedr/docker-test-action?tab=readme-ov-file#readme) - Docker Image
 
-Note: The `docker-action` template runs from, builds for, and pushes images to [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
+Note: The `docker-test-action` builds, runs and pushes images to [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
 
 ---
 

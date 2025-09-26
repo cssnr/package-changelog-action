@@ -440,7 +440,7 @@ Specific Actions:
 
 </details>
 
-<details><summary>📝 Action Templates</summary>
+<details><summary>📝 Template Actions</summary>
 
 These are basic actions' templates that I use for creating new actions.
 

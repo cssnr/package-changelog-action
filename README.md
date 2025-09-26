@@ -423,7 +423,7 @@ Additionally, you can support other GitHub Actions I have published:
 
 <details><summary>❔ Unpublished Actions</summary>
 
-These actions' are not published on the Marketplace, but may be useful.
+These actions are not published on the Marketplace, but may be useful.
 
 Generic Actions:
 
@@ -442,7 +442,7 @@ Specific Actions:
 
 <details><summary>📝 Template Actions</summary>
 
-These are basic actions' templates that I use for creating new actions.
+These are basic action templates that I use for creating new actions.
 
 - [js-test-action](https://github.com/smashedr/js-test-action?tab=readme-ov-file#readme) - JavaScript
 - [py-test-action](https://github.com/smashedr/py-test-action?tab=readme-ov-file#readme) - Python

@@ -26,135 +26,129 @@ const maps = {
     },
 }
 
-;(async () => {
-    try {
-        core.info(`🏳️ Starting Package Changelog Action`)
+async function main() {
+    core.info(`🏳️ Starting Package Changelog Action`)
 
-        // // Extra Debug
-        // core.startGroup('Debug: github.context')
-        // console.log(github.context)
-        // core.endGroup() // Debug github.context
-        // core.startGroup('Debug: process.env')
-        // console.log(process.env)
-        // core.endGroup() // Debug process.env
+    // // Extra Debug
+    // core.startGroup('Debug: github.context')
+    // console.log(github.context)
+    // core.endGroup() // Debug github.context
+    // core.startGroup('Debug: process.env')
+    // console.log(process.env)
+    // core.endGroup() // Debug process.env
 
-        // Debug
-        core.startGroup('Debug')
-        console.log('github.context.payload.repo:', github.context.repo)
-        console.log('github.context.eventName:', github.context.eventName)
-        console.log('github.context.ref:', github.context.ref)
-        core.endGroup() // Debug
-        if (github.context.eventName !== 'release') {
-            return core.warning(`Skipping event: ${github.context.eventName}`)
-        }
-
-        // Get Inputs
-        const inputs = getInputs()
-        core.startGroup('Parsed Inputs')
-        console.log(inputs)
-        core.endGroup() // Get Inputs
-        if (!inputs.max || inputs.max > 100) {
-            return core.setFailed('The max must be between 1 and 100.')
-        }
-
-        // Set Variables
-        const octokit = github.getOctokit(inputs.token)
-        const packageLockParser = new PackageLockParser.PackageLockParser()
-
-        // STAGE 1 - Parsing Event and Current/Previous Tags
-
-        // Process Releases
-        core.startGroup(`Processing: ${github.context.payload.release.id}`)
-        const [current, previous] = await getReleases(inputs, octokit)
-        core.endGroup() // Processing
-
-        core.startGroup('Current Releases')
-        console.log(current)
-        core.endGroup() // Current Releases
-        core.startGroup('Previous Releases')
-        console.log(previous)
-        core.endGroup() // Previous Releases
-
-        if (!current) {
-            return core.setFailed('Current Release Not Found!')
-        }
-        if (!previous) {
-            return core.error('No Previous Release. Nothing to do...')
-        }
-        console.log('Current Tag:', current.tag_name)
-        console.log('Previous Tag:', previous.tag_name)
-
-        // STAGE 2 - Processing Lock Files
-
-        // currentLock
-        const currentFile = await getLock(inputs, octokit, current.tag_name)
-        const currentLock = packageLockParser.parseLockFile(currentFile)
-        // console.log('currentLock:', currentLock)
-
-        // prevLock
-        const prevFile = await getLock(inputs, octokit, previous.tag_name)
-        const prevLock = packageLockParser.parseLockFile(prevFile)
-        // console.log('prevLock:', prevLock)
-
-        // STAGE 3 - Process Results
-
-        // Parse Changes
-        core.startGroup('Processing Results')
-        const data = diffLocks(prevLock, currentLock)
-        // console.log('data:', data)
-        const tableData = genTable(inputs, data)
-        // console.log('tableData:', tableData)
-        const markdown = genMarkdown(inputs, tableData)
-        // console.log('markdown:', markdown)
-        core.endGroup() // Processing Results
-
-        if (!tableData.length) {
-            core.info('No Changes Found!')
-        }
-
-        // Update Release
-        if (inputs.update && (tableData.length || inputs.empty)) {
-            core.startGroup('Current Release Body')
-            core.info(current.body)
-            core.endGroup() // Current Release Body
-            const body = `${current.body}\n\n${markdown}\n`
-            core.startGroup('Updated Release Body')
-            console.log(body)
-            core.endGroup() // Updated Release Body
-
-            core.info('⌛ \u001b[33;1mUpdating Release Now...')
-            await octokit.rest.repos.updateRelease({
-                ...github.context.repo,
-                release_id: github.context.payload.release.id,
-                body,
-            })
-        } else {
-            core.info('⏩ \u001b[33;1mSkipping Release Notes Update')
-        }
-
-        // Outputs
-        core.info('📩 Setting Outputs')
-        core.setOutput('json', JSON.stringify(data))
-        core.setOutput('markdown', markdown)
-
-        // Summary
-        if (inputs.summary) {
-            core.info('📝 Writing Job Summary')
-            try {
-                await addSummary(inputs, markdown)
-            } catch (e) {
-                console.log(e)
-                core.error(`Error writing Job Summary ${e.message}`)
-            }
-        }
-
-        core.info(`✅ \u001b[32;1mFinished Success`)
-    } catch (e) {
-        core.debug(e)
-        core.info(e.message)
-        core.setFailed(e.message)
+    // Debug
+    core.startGroup('Debug')
+    console.log('github.context.payload.repo:', github.context.repo)
+    console.log('github.context.eventName:', github.context.eventName)
+    console.log('github.context.ref:', github.context.ref)
+    core.endGroup() // Debug
+    if (github.context.eventName !== 'release') {
+        return core.warning(`Skipping event: ${github.context.eventName}`)
     }
-})()
+
+    // Get Inputs
+    const inputs = getInputs()
+    core.startGroup('Parsed Inputs')
+    console.log(inputs)
+    core.endGroup() // Get Inputs
+    if (!inputs.max || inputs.max > 100) {
+        return core.setFailed('The max must be between 1 and 100.')
+    }
+
+    // Set Variables
+    const octokit = github.getOctokit(inputs.token)
+    const packageLockParser = new PackageLockParser.PackageLockParser()
+
+    // STAGE 1 - Parsing Event and Current/Previous Tags
+
+    // Process Releases
+    core.startGroup(`Processing: ${github.context.payload.release.id}`)
+    const [current, previous] = await getReleases(inputs, octokit)
+    core.endGroup() // Processing
+
+    core.startGroup('Current Releases')
+    console.log(current)
+    core.endGroup() // Current Releases
+    core.startGroup('Previous Releases')
+    console.log(previous)
+    core.endGroup() // Previous Releases
+
+    if (!current) {
+        return core.setFailed('Current Release Not Found!')
+    }
+    if (!previous) {
+        return core.error('No Previous Release. Nothing to do...')
+    }
+    console.log('Current Tag:', current.tag_name)
+    console.log('Previous Tag:', previous.tag_name)
+
+    // STAGE 2 - Processing Lock Files
+
+    // currentLock
+    const currentFile = await getLock(inputs, octokit, current.tag_name)
+    const currentLock = packageLockParser.parseLockFile(currentFile)
+    // console.log('currentLock:', currentLock)
+
+    // prevLock
+    const prevFile = await getLock(inputs, octokit, previous.tag_name)
+    const prevLock = packageLockParser.parseLockFile(prevFile)
+    // console.log('prevLock:', prevLock)
+
+    // STAGE 3 - Process Results
+
+    // Parse Changes
+    core.startGroup('Processing Results')
+    const data = diffLocks(prevLock, currentLock)
+    // console.log('data:', data)
+    const tableData = genTable(inputs, data)
+    // console.log('tableData:', tableData)
+    const markdown = genMarkdown(inputs, tableData)
+    // console.log('markdown:', markdown)
+    core.endGroup() // Processing Results
+
+    if (!tableData.length) {
+        core.info('No Changes Found!')
+    }
+
+    // Update Release
+    if (inputs.update && (tableData.length || inputs.empty)) {
+        core.startGroup('Current Release Body')
+        core.info(current.body)
+        core.endGroup() // Current Release Body
+        const body = `${current.body}\n\n${markdown}\n`
+        core.startGroup('Updated Release Body')
+        console.log(body)
+        core.endGroup() // Updated Release Body
+
+        core.info('⌛ \u001b[33;1mUpdating Release Now...')
+        await octokit.rest.repos.updateRelease({
+            ...github.context.repo,
+            release_id: github.context.payload.release.id,
+            body,
+        })
+    } else {
+        core.info('⏩ \u001b[33;1mSkipping Release Notes Update')
+    }
+
+    // Outputs
+    core.info('📩 Setting Outputs')
+    core.setOutput('json', JSON.stringify(data))
+    core.setOutput('markdown', markdown)
+
+    // Summary
+    if (inputs.summary) {
+        core.info('📝 Writing Job Summary')
+        try {
+            await addSummary(inputs, markdown)
+        } catch (e) {
+            console.log(e)
+            core.error(`Error writing Job Summary ${e.message}`)
+        }
+    }
+
+    core.info(`✅ \u001b[32;1mFinished Success`)
+}
 
 /**
  * Generate Markdown
@@ -407,3 +401,9 @@ function getInputs() {
         token: core.getInput('token', { required: true }),
     }
 }
+
+main().catch((e) => {
+    core.debug(e)
+    core.info(e.message)
+    core.setFailed(e.message)
+})

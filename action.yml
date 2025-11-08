@@ -1,5 +1,5 @@
 name: "Package Changelog"
-description: "Automatically Generate a Markdown Table w/ Changelogs for NPM/Node/Yarn Package-lock.json Files for Release Notes"
+description: "Automatically Generate a Markdown Table w/ Changelogs for NPM/Node/Yarn Package-lock.json Files for Release Notes."
 author: "Shane"
 branding:
   icon: "activity"
@@ -8,47 +8,36 @@ branding:
 inputs:
   path:
     description: "Location of Lock File"
-    required: false
     default: "package-lock.json"
   update:
     description: "Update Release Notes"
-    required: false
     default: "true"
   heading:
     description: "Release Notes Heading"
-    required: false
     default: "### Package Changes"
   toggle:
     description: "Toggle Text for Summary"
-    required: false
     default: "Click Here to View Changes"
   open:
     description: "Summary Open by Default"
-    required: false
     default: "false"
   empty:
     description: "Add Summary on No Changes"
-    required: false
     default: "false"
   columns:
     description: "Customize Table Columns"
-    required: false
     default: "n,i,t,b,a"
   sections:
     description: "Customize Package Sections"
-    required: false
     default: "a,u,d,r,k"
   max:
     description: "Max Releases to Process"
-    required: false
     default: "30"
   summary:
     description: "Add Workflow Job Summary"
-    required: false
     default: "true"
   token:
     description: "GitHub Token"
-    required: false
     default: ${{ github.token }}
 
 outputs:

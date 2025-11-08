@@ -1,0 +1,151 @@
+name: "Lint"
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: "Lint"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v5
+
+      - name: "Setup Node 24"
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: "Install"
+        id: install
+        run: |
+          npm ci
+
+      - name: "ESLint"
+        id: eslint
+        if: ${{ !cancelled() }}
+        run: |
+          npm run lint:report
+
+      - name: "Prettier"
+        if: ${{ !cancelled() }}
+        run: |
+          npm run prettier:check
+
+      - name: "Yamllint"
+        if: ${{ !cancelled() }}
+        env:
+          CONFIG: "{extends: relaxed, ignore: [node_modules/], rules: {line-length: {max: 119}}}"
+        run: |
+          echo "::group::List Files"
+          yamllint -d '${{ env.CONFIG }}' --list-files .
+          echo "::endgroup::"
+          yamllint -d '${{ env.CONFIG }}' .
+
+      - name: "Actionlint"
+        if: ${{ !cancelled() }}
+        run: |
+          echo "::group::Download"
+          loc=$(curl -sI https://github.com/rhysd/actionlint/releases/latest | grep -i '^location:')
+          echo "loc: ${loc}"
+          tag=$(echo "${loc}" | sed -E 's|.*/tag/v?(.*)|\1|' | tr -d '\t\r\n')
+          echo "tag: ${tag}"
+          url="https://github.com/rhysd/actionlint/releases/latest/download/actionlint_${tag}_linux_amd64.tar.gz"
+          echo "url: ${url}"
+          curl -sL "${url}" | tar xz -C "${RUNNER_TEMP}" actionlint
+          file "${RUNNER_TEMP}/actionlint"
+          "${RUNNER_TEMP}/actionlint" --version
+          echo "::endgroup::"
+          "${RUNNER_TEMP}/actionlint" -color -verbose -shellcheck= -pyflakes=
+
+      - name: "Verify action.yml"
+        if: ${{ !cancelled() }}
+        run: |
+          yq -e '.runs.main | test("^dist/")' action.yml
+
+      #- name: "Check Build Action"
+      #  if: ${{ !cancelled() }}
+      #  uses: cssnr/check-build-action@master
+
+      - name: "ESLint Annotate"
+        if: ${{ failure() && steps.eslint.outcome != 'success' }}
+        uses: ataylorme/eslint-annotate-action@v3
+
+      #- name: "Vale"
+      #  if: ${{ !cancelled() }}
+      #  uses: errata-ai/vale-action@v2.1.1
+
+      #- name: "SonarQube"
+      #  uses: SonarSource/sonarqube-scan-action@v4
+      #  env:
+      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v5
+
+      - name: "Debug event.json"
+        continue-on-error: true
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
+
+      - name: "Debug"
+        continue-on-error: true
+        run: |
+          echo "github.actor: ${{ github.actor }}"
+          echo "github.triggering_actor: ${{ github.triggering_actor }}"
+          echo "github.event.pull_request.head.user.login: ${{ github.event.pull_request.head.user.login }}"
+
+      - name: "Setup Node 24"
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: "Install"
+        run: |
+          npm ci
+
+      - name: "Build"
+        run: |
+          npm run build
+
+      - name: "Verify"
+        run: |
+          git status --porcelain dist/
+          if [ ! -d "dist" ];then
+            echo "Missing dist directory; run 'npm run build' then add, commit and push the 'dist' folder."
+            exit 1
+          fi
+          if [ -n "$(git status --porcelain dist)" ];then
+            echo "Build was not run; run 'npm run build' then add, commit and push the 'dist' folder."
+            exit 1
+          fi
+
+      #- name: "Verify Failed"
+      #  if: ${{ failure() && github.event_name == 'pull_request' }}
+      #  env:
+      #    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  run: |
+      #    echo "Adding comment to PR number: ${{ github.event.number }}"
+      #    comment='@${{ github.triggering_actor }} - run `npm run build` then add, commit and push the `dist` folder.'
+      #    echo "${comment}"
+      #    gh pr comment ${{ github.event.number }} --body "${comment}"

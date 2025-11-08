@@ -1,5 +1,5 @@
 name: "Package Changelog"
-description: "Automatically Generate a Markdown Table w/ Changelogs for NPM/Node/Yarn Package-lock.json Files for Release Notes"
+description: "Automatically Generate a Markdown Table w/ Changelogs for NPM/Node/Yarn Package-lock.json Files for Release Notes."
 author: "Shane"
 branding:
   icon: "activity"

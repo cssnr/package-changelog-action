@@ -222,16 +222,28 @@ function genTable(inputs, data) {
  * @return {Promise<String>}
  */
 async function getLock(inputs, octokit, ref) {
-    const lockData = await octokit.rest.repos.getContent({
+    /**
+     * Response data is the string content with mediaType: raw
+     * https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
+     * @type {object}
+     * @property {string} data
+     * */
+    const response = await octokit.rest.repos.getContent({
         ...github.context.repo,
         path: inputs.path,
         ref,
+        mediaType: { format: 'raw' },
     })
-    if (!lockData.data?.content) {
-        console.log('lockData:', lockData)
+    if (!response.data) {
+        console.log('response:', response)
         throw new Error('Unable to parse lock file content.')
     }
-    return Base64.decode(lockData.data.content)
+    return response.data
+    // if (!lockData.data?.content) {
+    //     console.log('lockData:', lockData)
+    //     throw new Error('Unable to parse lock file content.')
+    // }
+    // return Base64.decode(lockData.data.content)
 }
 
 /**

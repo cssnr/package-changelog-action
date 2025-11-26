@@ -5,7 +5,6 @@ const PackageLockParser = require('snyk-nodejs-lockfile-parser/dist/parsers/pack
 const semverCompare = require('semver/functions/compare')
 const semverValid = require('semver/functions/valid')
 
-const { Base64 } = require('js-base64')
 const { markdownTable } = require('markdown-table')
 
 const maps = {

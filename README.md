@@ -8,9 +8,9 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_package-changelog-action&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cssnr_package-changelog-action)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/package-changelog-action?logo=github&label=updated)](https://github.com/cssnr/package-changelog-action/pulse)
 [![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cssnr/package-changelog-action/master?gitea_url=https%3A%2F%2Fcodeberg.org%2F&logo=codeberg&logoColor=white&label=updated)](https://codeberg.org/cssnr/package-changelog-action)
-[![GitHub Contributors](https://img.shields.io/github/contributors-anon/cssnr/package-changelog-action?logo=github)](https://github.com/cssnr/package-changelog-action/graphs/contributors)
 [![GitHub Repo Size](https://img.shields.io/github/repo-size/cssnr/package-changelog-action?logo=bookstack&logoColor=white&label=repo%20size)](https://github.com/cssnr/package-changelog-action?tab=readme-ov-file#readme)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/package-changelog-action?logo=htmx)](https://github.com/cssnr/package-changelog-action?tab=readme-ov-file#readme)
+[![GitHub Contributors](https://img.shields.io/github/contributors-anon/cssnr/package-changelog-action?logo=github)](https://github.com/cssnr/package-changelog-action/graphs/contributors)
 [![GitHub Forks](https://img.shields.io/github/forks/cssnr/package-changelog-action?style=flat&logo=github)](https://github.com/cssnr/package-changelog-action/forks)
 [![GitHub Discussions](https://img.shields.io/github/discussions/cssnr/package-changelog-action?logo=github)](https://github.com/cssnr/package-changelog-action/discussions)
 [![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/package-changelog-action?style=flat&logo=github)](https://github.com/cssnr/package-changelog-action/stargazers)
@@ -232,8 +232,8 @@ This outputs the changes `json` object and the `markdown` table.
     JSON: ${{ steps.changelog.outputs.json }}
     MARKDOWN: ${{ steps.changelog.outputs.markdown }}
   run: |
-    echo "json: '${{ env.JSON }}'"
-    echo "markdown: '${{ env.MARKDOWN }}'"
+    echo "json: ${JSON}"
+    echo "markdown: ${MARKDOWN}"
 ```
 
 Note: due to the way `${{}}` expressions are evaluated, multi-line output gets executed in a run block.
@@ -307,8 +307,8 @@ This changes the section order to put Updated before Added.
     JSON: ${{ steps.changelog.outputs.json }}
     MARKDOWN: ${{ steps.changelog.outputs.markdown }}
   run: |
-    echo "json: '${{ env.JSON }}'"
-    echo "markdown: '${{ env.MARKDOWN }}'"
+    echo "json: ${JSON}"
+    echo "markdown: ${MARKDOWN}"
 ```
 
 </details>
@@ -402,16 +402,20 @@ and [additional](https://cssnr.com/) open source projects.
 
 [![Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/cssnr)
 
-Additionally, you can support other GitHub Actions I have published:
+[![Actions Tools](https://raw.githubusercontent.com/smashedr/repo-images/refs/heads/master/actions/actions-tools.png)](https://actions-tools.cssnr.com/)
+
+Additionally, you can support other [GitHub Actions](https://actions.cssnr.com/) I have published:
 
 - [Stack Deploy Action](https://github.com/cssnr/stack-deploy-action?tab=readme-ov-file#readme)
 - [Portainer Stack Deploy Action](https://github.com/cssnr/portainer-stack-deploy-action?tab=readme-ov-file#readme)
 - [Docker Context Action](https://github.com/cssnr/docker-context-action?tab=readme-ov-file#readme)
 - [Actions Up Action](https://github.com/cssnr/actions-up-action?tab=readme-ov-file#readme)
+- [Zensical Action](https://github.com/cssnr/zensical-action?tab=readme-ov-file#readme)
 - [VirusTotal Action](https://github.com/cssnr/virustotal-action?tab=readme-ov-file#readme)
 - [Mirror Repository Action](https://github.com/cssnr/mirror-repository-action?tab=readme-ov-file#readme)
 - [Update Version Tags Action](https://github.com/cssnr/update-version-tags-action?tab=readme-ov-file#readme)
 - [Docker Tags Action](https://github.com/cssnr/docker-tags-action?tab=readme-ov-file#readme)
+- [TOML Action](https://github.com/cssnr/toml-action?tab=readme-ov-file#readme)
 - [Update JSON Value Action](https://github.com/cssnr/update-json-value-action?tab=readme-ov-file#readme)
 - [JSON Key Value Check Action](https://github.com/cssnr/json-key-value-check-action?tab=readme-ov-file#readme)
 - [Parse Issue Form Action](https://github.com/cssnr/parse-issue-form-action?tab=readme-ov-file#readme)
@@ -445,10 +449,11 @@ These actions are not published on the Marketplace, but may be useful.
 
 These are basic action templates that I use for creating new actions.
 
-- [js-test-action](https://github.com/smashedr/js-test-action?tab=readme-ov-file#readme) - JavaScript
-- [ts-test-action](https://github.com/smashedr/ts-test-action?tab=readme-ov-file#readme) - TypeScript
-- [py-test-action](https://github.com/smashedr/py-test-action?tab=readme-ov-file#readme) - Python (Dockerfile)
-- [docker-test-action](https://github.com/smashedr/docker-test-action?tab=readme-ov-file#readme) - Docker (Image)
+- [javascript-action](https://github.com/smashedr/javascript-action?tab=readme-ov-file#readme) - JavaScript
+- [typescript-action](https://github.com/smashedr/typescript-action?tab=readme-ov-file#readme) - TypeScript
+- [py-test-action](https://github.com/smashedr/py-test-action?tab=readme-ov-file#readme) - Dockerfile Python
+- [test-action-uv](https://github.com/smashedr/test-action-uv?tab=readme-ov-file#readme) - Dockerfile Python UV
+- [docker-test-action](https://github.com/smashedr/docker-test-action?tab=readme-ov-file#readme) - Docker Image Python
 
 Note: The `docker-test-action` builds, runs and pushes images to [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
 

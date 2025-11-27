@@ -1,6 +1,8 @@
 name: "Check Build"
 
 on:
+  push:
+    branches: [master]
   pull_request_target:
     paths:
       - "dist/**"
@@ -30,7 +32,7 @@ jobs:
         run: echo "$GITHUB_CTX"
 
       - name: "Checkout Pull"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -45,4 +47,4 @@ jobs:
           echo "::endgroup::"
 
       - name: "Check Build Action"
-        uses: cssnr/check-build-action@v1
+        uses: cssnr/check-build-action@latest
